@@ -12,6 +12,17 @@
                 leading = true,
                 trailing = false;
 
+            function testSum123() {
+                let sum = add(1)(2)(3)(4);
+                console.log('add(1)(2)(3)(4):', sum);
+
+                sum = add(1)(2);
+                console.log('add(1)(2):', sum);
+
+                sum = add(1) + 10;
+                console.log('add(1):', sum);
+            }
+
             // let printEventLodashDebounced = _.debounce(event => {
             //     console.log('MouseMove: _.debounce', Date.now());
             // }, wait, {

@@ -10,12 +10,12 @@ function twoSum(nums, target) {
 
     nums.sort();
 
-    while (headIndex < tailIndex) {
+    while(headIndex < tailIndex) {
         sum = nums[headIndex] + nums[tailIndex];
 
-        if (sum < target) {
+        if(sum < target) {
             headIndex++;
-        } else if (sum > target) {
+        } else if(sum > target) {
             tailIndex++;
         } else {
             return [headIndex, tailIndex];

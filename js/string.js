@@ -1,21 +1,4 @@
-function lengthOfLongestSubstringWithUniqueCharacters(string) {
-    var start = 0,
-        current = start,
-        collection = [];
-
-    while(current < string.length) {
-        if(string.slice(start, current).indexOf(string[current]) >= 0) {
-            collection[start] = string.slice(start, current);
-            start++;
-        } else {
-            current++
-        }
-    }
-
-    return collection;
-}
-
-function isPalindromic(string) {
+function _isPalindromic(string) {
     var isPalindromicString = true,
         index = 0,
         stringLength = string.length;
@@ -31,40 +14,14 @@ function isPalindromic(string) {
     return isPalindromicString;
 }
 
-function longestPalindromicSubString(string) {
-    var subString,
-        index = 0,
-        current = 0,
-        collection = [];
-
-    while(current < string.length) {
-        while(((current - index) >= 0) && ((current + index) < string.length)) {
-            subString = string.slice(current - index, current + index + 1);
-
-            if(isPalindromic(subString)) {
-                collection[current] = subString;
-                index++;
-            } else {
-                current++;
-                index = 0;
-            }
-        }
-
-        current++;
-        index = 0;
-    }
-
-    return collection;
-}
-
-function addCharToString(string, char, index) {
+function _addCharToString(string, char, index) {
     var newString = string.split('');
 
     newString.splice(index, 0, char);
     return newString.join('');
 }
 
-function getStringPermutation(string) {
+function getPermutation(string) {
     var combinations = [],
         char,
         substring,
@@ -76,10 +33,10 @@ function getStringPermutation(string) {
         char = string[0];
         substring = string.substring(1);
 
-        substringCombinations = getStringPermutation(substring);
+        substringCombinations = getPermutation(substring);
         substringCombinations.forEach(function(substring) {
             for(var index = 0; index <= substring.length; index++) {
-                combinations.push(addCharToString(substring, char, index));
+                combinations.push(_addCharToString(substring, char, index));
             }
         });
     }
@@ -178,4 +135,47 @@ function lengthOfLongestSubstring(subSequenceSubject, subStringSubject) {
         i++;
     }
 
+}
+
+function lengthOfLongestSubstringWithUniqueCharacters(string) {
+    var start = 0,
+        current = start,
+        collection = [];
+
+    while(current < string.length) {
+        if(string.slice(start, current).indexOf(string[current]) >= 0) {
+            collection[start] = string.slice(start, current);
+            start++;
+        } else {
+            current++
+        }
+    }
+
+    return collection;
+}
+
+function longestPalindromicSubString(string) {
+    var subString,
+        index = 0,
+        current = 0,
+        collection = [];
+
+    while(current < string.length) {
+        while(((current - index) >= 0) && ((current + index) < string.length)) {
+            subString = string.slice(current - index, current + index + 1);
+
+            if(_isPalindromic(subString)) {
+                collection[current] = subString;
+                index++;
+            } else {
+                current++;
+                index = 0;
+            }
+        }
+
+        current++;
+        index = 0;
+    }
+
+    return collection;
 }
