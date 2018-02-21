@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script type="text/javascript" src="./js/stack.js"></script>
+        <script type="text/javascript" src="./js/queue.js"></script>
+        <script type="text/javascript" src="./js/link-list.js"></script>
+        <script type="text/javascript" src="./js/tree.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            // let preOrderArray = [7, 10, 4, 3, 1, 2, 8, 11];
+            // let inOrderArray = [4, 10, 3, 1, 7, 11, 8, 2];
+
+            // let preOrderArray = [1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 13, 7, 14, 15];
+            // let inOrderArray = [8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15];
+
+            // let preOrderArray = [1, 2, 4, 5, 3, 6];
+            // let inOrderArray = [4, 2, 5, 1, 6, 3];
+
+            let preOrderArray = [1, 2, 4, 5, 3, 6];
+            let inOrderArray = [4, 2, 5, 1, 6, 3];
+
+            let tree = new Tree(preOrderArray, inOrderArray);
+
+            // console.log('preOrderArray:', preOrderArray);
+            // console.log('inOrderArray:', inOrderArray);
+            console.log('tree:', tree);
+
+            // console.log('traversePreOrderRecursive', tree.traversePreOrderRecursive());
+            // console.log('traverseInOrderRecursive', tree.traverseInOrderRecursive());
+            // console.log('parseBFSIterative', tree.parseBFSIterative());
+            console.log('isComplete', tree.isComplete());
+
+            // console.log('parseDFSRecursive', tree.parseDFSRecursive());
+
+            // console.log("traversePreOrderIterative", tree.traversePreOrderIterative());
+            // console.log("traverseInOrderIterative", tree.traverseInOrderIterative());
+            // console.log('parseBFSIterative', tree.parseBFSIterative());
+
+            //            console.log("parseBFSIterativeSpirallyStacks", tree.parseBFSIterativeSpirallyStacks());
+
+            //            console.log("computeLeafsLoadRecursive: ", tree.computeLeafsLoadRecursive());
+            //            console.log("computeLeafsLoadIterative: ", tree.computeLeafsLoadIterative());
+
+            // console.log('findLargestButK', tree.findLargestButK());
+        </script>
+    </body>
+</html>

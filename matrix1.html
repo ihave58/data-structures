@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script type="text/javascript" src="./js/matrix.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            let matrix = [
+                [1, 2, 3, 4],
+                [5, 6, 7, 8],
+                [9, 10, 11, 12],
+                [13, 14, 15, 16]
+            ];
+
+            console.log('matrix:');
+            console.table(matrix);
+
+            // console.log('spiral:', printSpiral(matrix));
+
+            console.log('clockwise90:');
+            console.table(rotateClockwise90(matrix));
+
+            // console.log('antiClockwise90:');
+            // console.table(rotateCounterClockwise90(matrix));
+        </script>
+    </body>
+</html>

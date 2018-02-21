@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+            function createEmptyMatrix(rowSize, colSize) {
+                var matrix = new Array(rowSize),
+                        rowIndex;
+
+                for(rowIndex = 0; rowIndex < rowSize; rowIndex++) {
+                    matrix[rowIndex] = new Array(colSize);
+                }
+
+                return matrix;
+            }
+
+            function transpose(matrix) {
+                var rowIndex,
+                        colIndex,
+                        matrixHeight = matrix.length,
+                        matrixWidth = matrix[0].length,
+                        transposedMatrix = createEmptyMatrix(matrixHeight, matrixWidth);
+
+                for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
+                    for(colIndex = 0; colIndex < matrixWidth; colIndex++) {
+                        transposedMatrix[rowIndex][colIndex] = matrix[colIndex][rowIndex];
+                    }
+                }
+
+                return transposedMatrix;
+            }
+
+            function transposeInMemory(matrix) {
+                var rowIndex,
+                        colIndex,
+                        matrixHeight = matrix.length,
+                        matrixWidth = matrix[0].length,
+                        temp;
+
+                for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
+                    for(colIndex = rowIndex; colIndex < matrixWidth; colIndex++) {
+
+                        temp = matrix[colIndex][rowIndex];
+                        matrix[colIndex][rowIndex] = matrix[rowIndex][colIndex];
+                        matrix[rowIndex][colIndex] = temp;
+                    }
+                }
+
+                return matrix;
+            }
+
+            function reverseRows(matrix) {
+                var temp,
+                        rowIndex,
+                        colIndex,
+                        matrixHeight = matrix.length,
+                        matrixWidth = matrix[0].length;
+
+                for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
+                    for(colIndex = 0; colIndex < (matrixWidth / 2); colIndex++) {
+                        temp = matrix[rowIndex][colIndex];
+
+                        matrix[rowIndex][colIndex] = matrix[rowIndex][matrixWidth - colIndex - 1];
+                        matrix[rowIndex][matrixWidth - colIndex - 1] = temp;
+                    }
+                }
+
+                return matrix;
+            }
+
+            function reverseColumns(matrix) {
+                var temp,
+                        rowIndex,
+                        colIndex,
+                        matrixHeight = matrix.length,
+                        matrixWidth = matrix[0].length;
+
+                for(colIndex = 0; colIndex < matrixWidth; colIndex++) {
+                    for(rowIndex = 0; rowIndex < (matrixHeight / 2); rowIndex++) {
+
+                        temp = matrix[rowIndex][colIndex];
+
+                        matrix[rowIndex][colIndex] = matrix[matrixHeight - rowIndex - 1][colIndex];
+                        matrix[matrixHeight - rowIndex - 1][colIndex] = temp;
+                    }
+                }
+
+                return matrix;
+            }
+
+            function rotateMatrixBy90DegClockwise(matrix) {
+                matrix = transpose(matrix);
+                matrix = reverseRows(matrix);
+
+                return matrix;
+            }
+
+            function rotateMatrixBy90DegAntiClockwise(matrix) {
+                matrix = transpose(matrix);
+                matrix = reverseColumns(matrix);
+
+                return matrix;
+            }
+
+            function rotateMatrixBy180Deg(matrix) {
+                matrix = reverseColumns(matrix);
+                matrix = reverseRows(matrix);
+
+                return matrix;
+            }
+
+            var testMatrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]];
+            //var testMatrix = [[1, 2, 3, 4, 5, 6], [14, 15, 16, 17, 18, 7], [13, 12, 11, 10, 9, 8]];
+
+            console.table(testMatrix);
+
+            console.log("Rotated by +90deg:");
+            console.table(rotateMatrixBy90DegClockwise(testMatrix));
+
+            console.log("Rotated by -90deg:");
+            console.table(rotateMatrixBy90DegAntiClockwise(testMatrix));
+
+            console.log("Rotated by 180deg:");
+            console.table(rotateMatrixBy180Deg(testMatrix));
+
+            function test(){
+                "use strict";
+
+                var abc = {a: 10};
+
+                Object.seal(abc);
+                Object.freeze(abc);
+
+                abc.a = 20;
+                abc.b = 30;
+            }
+        </script>
+    </body>
+</html>

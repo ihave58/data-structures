@@ -1,0 +1,3 @@
+function findMaxProductOfTriplet(numbers) {
+
+}

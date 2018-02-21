@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            String.prototype.replaceAt = function (index, character) {
+                return this.substr(0, index) + character + this.substr(index + character.length);
+            };
+
+            function removeDuplicateElements(array) {
+                var index,
+                    uniqueIndex,
+                    uniqueLength = 1;
+
+                for (index = 1; index < array.length; index++) {
+                    for (uniqueIndex = 0; uniqueIndex < uniqueLength; uniqueIndex++) {
+                        if (array[uniqueIndex] === array[index]) {
+                            break;
+                        }
+                    }
+
+                    if (uniqueIndex === uniqueLength) {
+                        array[uniqueLength] = array[index];
+                        uniqueLength++;
+                    } else {
+                        array[uniqueLength] = 'x';
+                    }
+                }
+
+                return array;
+            }
+
+            var testArray = [1, 2, 3, 2, 1, 5, 4, 7, 8, 3, 6, 8, 5];
+
+            console.log(testArray);
+            console.log(removeDuplicateElements(testArray));
+        </script>
+    </body>
+</html>

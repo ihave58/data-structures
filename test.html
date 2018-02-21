@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function permuteString(charCollection, startIndex) {
+                var startIndex = startIndex || 0,
+                    endIndex = charCollection.length - 1,
+                    permutationSubResult,
+                    permutationResult = [];
+
+                if (endIndex - startIndex === 1) {
+                    permutationResult = [
+                        [
+                            charCollection[startIndex],
+                            charCollection[endIndex]
+                        ],
+                        [
+                            charCollection[endIndex],
+                            charCollection[startIndex]
+                        ]
+                    ];
+                } else {
+                    debugger;
+                    permutationSubResult = permuteString(charCollection, startIndex + 1);
+                    permutationSubResult.forEach(function (permutationEntry) {
+                        for (var index = 0; index < permutationEntry.length; index++) {
+                            permutationEntry.splice(index, 0, charCollection[startIndex]);
+
+                            permutationResult.push(permutationEntry);
+                        }
+                    });
+                }
+
+                return permutationResult;
+            }
+
+            console.log(permuteString(['a', 'b', 'c', 'd']));
+        </script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Utils</title>
+        <script type="application/javascript" src="./js/utils.js"></script>
+        <script type="application/javascript" src="./js/lodash.min.js"></script>
+    </head>
+    <body>
+        <script type="application/javascript">
+            const wait = 1000,
+                leading = true,
+                trailing = false;
+
+            // let printEventLodashDebounced = _.debounce(event => {
+            //     console.log('MouseMove: _.debounce', Date.now());
+            // }, wait, {
+            //     leading: leading,
+            //     trailing: trailing
+            // });
+            //
+            // let printEventDebounced = debounce(event => {
+            //     console.log('MouseMove: debounce', Date.now());
+            // }, wait, leading, trailing);
+
+            // document.addEventListener('mousemove', event => {
+            //     printEventDebounced(event);
+            //     printEventLodashDebounced(event);
+            //     console.log('-------------------------')
+            // });
+
+            let printEventLodashThrottled = _.throttle(event => {
+                console.log('MouseMove: _.throttle', Date.now());
+            }, wait, {
+                leading: leading,
+                trailing: trailing
+            });
+
+            let printEventThrottled = throttle(event => {
+                console.log('MouseMove: throttle', Date.now());
+            }, wait, leading, trailing);
+
+            document.addEventListener('mousemove', event => {
+                printEventLodashThrottled(event);
+                printEventThrottled(event);
+            });
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script type="text/javascript" src="./js/matrix-2.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            const matrix1 = [
+                [-1, 0, 0, 0, 1],
+                [0, 0, 0, 1, 1],
+                [0, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1]
+            ];
+
+            console.log('matrix:', matrix1);
+            console.log('countZeroes:', countZeroes(matrix1));
+
+            const matrix2 = [
+                [-1, -1, 0, 0, 1],
+                [-1, -1, 0, 1, 1],
+                [-1, 0, 0, 1, 1],
+                [0, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1]
+            ];
+            console.log('matrix:', matrix2);
+            console.log('countNegativeNumbers1:', countNegativeNumbers1(matrix2));
+            console.log('countNegativeNumbers2:', countNegativeNumbers2(matrix2));
+
+            const matrix3 = [
+                [-1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1]
+            ];
+            console.log('matrix:', matrix3);
+            console.log('countNegativeNumbers1:', countNegativeNumbers1(matrix3));
+            console.log('countNegativeNumbers2:', countNegativeNumbers2(matrix3));
+        </script>
+    </body>
+</html>

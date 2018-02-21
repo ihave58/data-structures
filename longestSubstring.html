@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            String.prototype.replaceAt = function(index, character) {
+                return this.substr(0, index) + character + this.substr(index + character.length);
+            };
+
+            var charMap = {
+                map: {},
+                addChar: function(char) {
+                    if(charMap.map[char]) {
+                        charMap.map[char]++;
+                    } else {
+                        charMap.map[char] = 1;
+                    }
+                },
+                removeChar: function(char) {
+                    if(charMap.map[char]) {
+                        charMap.map[char]--;
+                    }
+                },
+                getSize: function() {
+                    var charKey,
+                            size = 0;
+
+                    for(charKey in charMap.map) {
+                        if(charMap.map.hasOwnProperty(charKey) && !!charMap.map[charKey]) {
+                            size++;
+                        }
+                    }
+
+                    return size;
+                }
+            };
+
+            function getLongestSubstring(subject, charCount) {
+                var largestSubString = "",
+                        subString,
+                        startIndex = 0,
+                        endIndex = startIndex + 1;
+
+                if(subject.length <= charCount) {
+                    return startIndex;
+                }
+
+                charMap.addChar(subject[startIndex]);
+                charMap.addChar(subject[endIndex]);
+                subString = subject.substring(startIndex, endIndex + 1);
+
+                if(subString.length > largestSubString.length) {
+                    largestSubString = subString;
+                }
+
+                while(endIndex < subject.length) {
+                    if(charMap.getSize() <= charCount) {
+                        endIndex++;
+                        charMap.addChar(subject[endIndex]);
+                    } else {
+                        charMap.removeChar(subject[startIndex]);
+                        startIndex++;
+                    }
+
+                    if(charMap.getSize() <= charCount) {
+                        subString = subject.substring(startIndex, endIndex + 1);
+
+                        if(subString.length > largestSubString.length) {
+                            largestSubString = subString;
+                        }
+                    }
+                }
+
+                return largestSubString;
+            }
+
+            console.log(getLongestSubstring("aabacaabaadbbed", 2));
+        </script>
+    </body>
+</html>
