@@ -1,5 +1,5 @@
 function _isPalindromic(string) {
-    var isPalindromicString = true,
+    let isPalindromicString = true,
         index = 0,
         stringLength = string.length;
 
@@ -15,14 +15,14 @@ function _isPalindromic(string) {
 }
 
 function _addCharToString(string, char, index) {
-    var newString = string.split('');
+    let newString = string.split('');
 
     newString.splice(index, 0, char);
     return newString.join('');
 }
 
 function getPermutation(string) {
-    var combinations = [],
+    let combinations = [],
         char,
         substring,
         substringCombinations;
@@ -35,7 +35,7 @@ function getPermutation(string) {
 
         substringCombinations = getPermutation(substring);
         substringCombinations.forEach(function(substring) {
-            for(var index = 0; index <= substring.length; index++) {
+            for(let index = 0; index <= substring.length; index++) {
                 combinations.push(_addCharToString(substring, char, index));
             }
         });
@@ -45,7 +45,7 @@ function getPermutation(string) {
 }
 
 function getAllSubString(string) {
-    var startIndex,
+    let startIndex,
         endIndex,
         collection = [];
 
@@ -59,13 +59,13 @@ function getAllSubString(string) {
 }
 
 function getSubSequencePermutation(string) {
-    var output = [],
+    let output = [],
         solutionLength = Math.pow(2, string.length);
 
-    for(var counter = 1; counter < solutionLength; counter++) {
+    for(let counter = 1; counter < solutionLength; counter++) {
         output = [];
 
-        for(var index = 0; index < string.length; index++) {
+        for(let index = 0; index < string.length; index++) {
             if(counter & (1 << index)) {
                 output.push(string[index]);
             }
@@ -76,7 +76,7 @@ function getSubSequencePermutation(string) {
 }
 
 function findPattern(pattern, string) {
-    var stringIndex = 0,
+    let stringIndex = 0,
         patternIndex = 0;
 
     while(stringIndex < string.length) {
@@ -98,12 +98,12 @@ function findPattern(pattern, string) {
 }
 
 function getLongestPalindromicSubSequence(string) {
-    var startIndex = 0,
+    let startIndex = 0,
         endIndex = string.length - 1,
         counter = 0;
 
     function _getLongestSubSequencePalindrome(string, startIndex, endIndex) {
-        var palindromeLength;
+        let palindromeLength;
 
         counter++;
 
@@ -128,7 +128,7 @@ function getLongestPalindromicSubSequence(string) {
 }
 
 function lengthOfLongestSubstring(subSequenceSubject, subStringSubject) {
-    var i;
+    let i;
 
     while(i < subSequenceSubject.length) {
 
@@ -138,7 +138,7 @@ function lengthOfLongestSubstring(subSequenceSubject, subStringSubject) {
 }
 
 function lengthOfLongestSubstringWithUniqueCharacters(string) {
-    var start = 0,
+    let start = 0,
         current = start,
         collection = [];
 
@@ -155,7 +155,7 @@ function lengthOfLongestSubstringWithUniqueCharacters(string) {
 }
 
 function longestPalindromicSubString(string) {
-    var subString,
+    let subString,
         index = 0,
         current = 0,
         collection = [];
