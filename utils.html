@@ -8,20 +8,13 @@
     </head>
     <body>
         <script type="application/javascript">
-            const wait = 1000,
+            const wait = 2000,
                 leading = true,
-                trailing = false;
+                trailing = true;
 
-            function testSum123() {
-                let sum = add(1)(2)(3)(4);
-                console.log('add(1)(2)(3)(4):', sum);
-
-                sum = add(1)(2);
-                console.log('add(1)(2):', sum);
-
-                sum = add(1) + 10;
-                console.log('add(1):', sum);
-            }
+            // console.log('add(1)(2)(3)(4):', add(1)(2)(3)(4));
+            // console.log('add(1)(2):', add(1)(2));
+            // console.log('add(1):', add(1) + 10);
 
             // let printEventLodashDebounced = _.debounce(event => {
             //     console.log('MouseMove: _.debounce', Date.now());
@@ -33,7 +26,7 @@
             // let printEventDebounced = debounce(event => {
             //     console.log('MouseMove: debounce', Date.now());
             // }, wait, leading, trailing);
-
+            //
             // document.addEventListener('mousemove', event => {
             //     printEventDebounced(event);
             //     printEventLodashDebounced(event);

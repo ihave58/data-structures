@@ -59,9 +59,7 @@ const throttle = (callback, limit, leading, trailing) => {
             callback.apply(context, args);
         };
 
-        if(inThrottle) {
-
-        } else {
+        if(!inThrottle) {
             leading && fn();
 
             setTimeout(() => {

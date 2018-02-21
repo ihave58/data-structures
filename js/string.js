@@ -59,20 +59,22 @@ function getAllSubString(string) {
 }
 
 function getSubSequencePermutation(string) {
-    let output = [],
-        solutionLength = Math.pow(2, string.length);
+    let solutionLength = Math.pow(2, string.length),
+        permutations = [];
 
     for(let counter = 1; counter < solutionLength; counter++) {
-        output = [];
+        let subSequence = [];
 
         for(let index = 0; index < string.length; index++) {
             if(counter & (1 << index)) {
-                output.push(string[index]);
+                subSequence.push(string[index]);
             }
         }
 
-        console.log(output.join());
+        permutations.push(subSequence.join(''));
     }
+
+    return permutations;
 }
 
 function findPattern(pattern, string) {
