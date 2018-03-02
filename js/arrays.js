@@ -1,7 +1,3 @@
-function findMaxProductOfTriplet(numbers) {
-
-}
-
 function swap(array, sourceIndex, targetIndex) {
     let temp;
 
@@ -33,6 +29,47 @@ function _binarySearch(array, item, startIndex, endIndex) {
         );
 
     }
+}
+
+function _mergeInPlace(array, startIndex, midIndex, endIndex) {
+    let array1Index,
+        array2Index,
+        lastArray1Item;
+
+    for(array2Index = endIndex; array2Index > midIndex; array2Index--) {
+        lastArray1Item = array[midIndex];
+
+        for(array1Index = midIndex - 1;
+            (array1Index >= startIndex) && (array[array1Index] > array[array2Index]); array1Index--) {
+
+            array[array1Index + 1] = array[array1Index];
+        }
+
+        if((array1Index != (midIndex - 1)) || (lastArray1Item > array[array2Index])) {
+            array[array1Index + 1] = array[array2Index];
+            array[array2Index] = lastArray1Item;
+        }
+    }
+}
+
+function merge(array1, array2) {
+    let array1Index = 0,
+        array2Index = 0,
+        targetArray = [];
+
+    while(array1Index < array1.length || array2Index < array2.length) {
+        if(array1[array1Index] < array2[array2Index]) {
+            targetArray.push(array1[array1Index]);
+
+            array1Index++;
+        } else {
+            targetArray.push(array2[array2Index]);
+
+            array2Index++;
+        }
+    }
+
+    return targetArray;
 }
 
 function binarySearch(array, item) {
@@ -108,27 +145,6 @@ function insertionSort(array) {
     return array;
 }
 
-function _mergeInPlace(array, startIndex, midIndex, endIndex) {
-    let array1Index,
-        array2Index,
-        lastArray1Item;
-
-    for(array2Index = endIndex; array2Index > midIndex; array2Index--) {
-        lastArray1Item = array[midIndex];
-
-        for(array1Index = midIndex - 1;
-            (array1Index >= startIndex) && (array[array1Index] > array[array2Index]); array1Index--) {
-
-            array[array1Index + 1] = array[array1Index];
-        }
-
-        if((array1Index != (midIndex - 1)) || (lastArray1Item > array[array2Index])) {
-            array[array1Index + 1] = array[array2Index];
-            array[array2Index] = lastArray1Item;
-        }
-    }
-}
-
 function _mergeSort(array, startIndex, endIndex) {
     let midIndex = Math.floor((startIndex + endIndex) / 2);
 
@@ -149,26 +165,6 @@ function mergeSort(array) {
     _mergeSort(array, startIndex, endIndex);
 
     return array;
-}
-
-function merge(array1, array2) {
-    let array1Index = 0,
-        array2Index = 0,
-        targetArray = [];
-
-    while(array1Index < array1.length || array2Index < array2.length) {
-        if(array1[array1Index] < array2[array2Index]) {
-            targetArray.push(array1[array1Index]);
-
-            array1Index++;
-        } else {
-            targetArray.push(array2[array2Index]);
-
-            array2Index++;
-        }
-    }
-
-    return targetArray;
 }
 
 function mergeInPlace(array1, array2) {
