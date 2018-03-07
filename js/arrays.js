@@ -120,15 +120,18 @@ function selectionSort(array) {
 function bubbleSort(array) {
     let i = 0,
         j = i + 1,
+        hasSwappedAtleastOnce,
         timeComplexity = 0;
 
     array = array.slice();
 
     for(i = 0; i < array.length; i++) {
-        for(j = 0; j < array.length - 1; j++) {
+        hasSwappedAtleastOnce = false;
+
+        for(j = 0; j < (array.length - 1) && (hasSwappedAtleastOnce === false); j++) {
             if(array[j] > array[j + 1]) {
-                // console.log('Swapping:', array[j], array[j + 1]);
                 swap(array, j, j + 1);
+                hasSwappedAtleastOnce = true;
             }
 
             timeComplexity++;
@@ -191,7 +194,7 @@ function mergeSort(array) {
     return array;
 }
 
-function partition(array, startIndex, endIndex) {
+function doPartition(array, startIndex, endIndex) {
     let index = startIndex,
         sortedPartitionIndex = index - 1,
         pivot = array[endIndex];
@@ -208,12 +211,15 @@ function partition(array, startIndex, endIndex) {
     sortedPartitionIndex++;
     swap(array, sortedPartitionIndex, endIndex);
 
+    // console.log(array);
     return sortedPartitionIndex;
 }
 
 function _quickSort(array, startIndex, endIndex, complexity) {
+    console.log(startIndex, endIndex);
+
     if(endIndex > startIndex) {
-        let pivotIndex = partition(array, startIndex, endIndex);
+        let pivotIndex = doPartition(array, startIndex, endIndex);
 
         _quickSort(array, startIndex, pivotIndex - 1, complexity);
         _quickSort(array, pivotIndex + 1, endIndex, complexity);
