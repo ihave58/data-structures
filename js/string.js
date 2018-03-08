@@ -118,8 +118,10 @@ function getLongestPalindromicSubSequence(string) {
                 palindromeLength = _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex - 1) + 2;
             }
         } else {
-            palindromeLength = Math.max(_getLongestSubSequencePalindrome(string, startIndex, endIndex - 1),
-                _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex));
+            palindromeLength = Math.max(
+                _getLongestSubSequencePalindrome(string, startIndex, endIndex - 1),
+                _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex)
+            );
         }
 
         return palindromeLength;

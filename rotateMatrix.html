@@ -9,7 +9,7 @@
 
             function createEmptyMatrix(rowSize, colSize) {
                 var matrix = new Array(rowSize),
-                        rowIndex;
+                    rowIndex;
 
                 for(rowIndex = 0; rowIndex < rowSize; rowIndex++) {
                     matrix[rowIndex] = new Array(colSize);
@@ -20,10 +20,10 @@
 
             function transpose(matrix) {
                 var rowIndex,
-                        colIndex,
-                        matrixHeight = matrix.length,
-                        matrixWidth = matrix[0].length,
-                        transposedMatrix = createEmptyMatrix(matrixHeight, matrixWidth);
+                    colIndex,
+                    matrixHeight = matrix.length,
+                    matrixWidth = matrix[0].length,
+                    transposedMatrix = createEmptyMatrix(matrixHeight, matrixWidth);
 
                 for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
                     for(colIndex = 0; colIndex < matrixWidth; colIndex++) {
@@ -36,10 +36,10 @@
 
             function transposeInMemory(matrix) {
                 var rowIndex,
-                        colIndex,
-                        matrixHeight = matrix.length,
-                        matrixWidth = matrix[0].length,
-                        temp;
+                    colIndex,
+                    matrixHeight = matrix.length,
+                    matrixWidth = matrix[0].length,
+                    temp;
 
                 for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
                     for(colIndex = rowIndex; colIndex < matrixWidth; colIndex++) {
@@ -55,10 +55,10 @@
 
             function reverseRows(matrix) {
                 var temp,
-                        rowIndex,
-                        colIndex,
-                        matrixHeight = matrix.length,
-                        matrixWidth = matrix[0].length;
+                    rowIndex,
+                    colIndex,
+                    matrixHeight = matrix.length,
+                    matrixWidth = matrix[0].length;
 
                 for(rowIndex = 0; rowIndex < matrixHeight; rowIndex++) {
                     for(colIndex = 0; colIndex < (matrixWidth / 2); colIndex++) {
@@ -74,10 +74,10 @@
 
             function reverseColumns(matrix) {
                 var temp,
-                        rowIndex,
-                        colIndex,
-                        matrixHeight = matrix.length,
-                        matrixWidth = matrix[0].length;
+                    rowIndex,
+                    colIndex,
+                    matrixHeight = matrix.length,
+                    matrixWidth = matrix[0].length;
 
                 for(colIndex = 0; colIndex < matrixWidth; colIndex++) {
                     for(rowIndex = 0; rowIndex < (matrixHeight / 2); rowIndex++) {
@@ -113,22 +113,27 @@
                 return matrix;
             }
 
-            var testMatrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]];
+            var testMatrix = [
+                [1, 2, 3, 4],
+                [5, 6, 7, 8],
+                [9, 10, 11, 12],
+                [13, 14, 15, 16]
+            ];
             //var testMatrix = [[1, 2, 3, 4, 5, 6], [14, 15, 16, 17, 18, 7], [13, 12, 11, 10, 9, 8]];
 
             console.table(testMatrix);
 
-            console.log("Rotated by +90deg:");
+            console.log('Rotated by +90deg:');
             console.table(rotateMatrixBy90DegClockwise(testMatrix));
 
-            console.log("Rotated by -90deg:");
+            console.log('Rotated by -90deg:');
             console.table(rotateMatrixBy90DegAntiClockwise(testMatrix));
 
-            console.log("Rotated by 180deg:");
+            console.log('Rotated by 180deg:');
             console.table(rotateMatrixBy180Deg(testMatrix));
 
-            function test(){
-                "use strict";
+            function test() {
+                'use strict';
 
                 var abc = {a: 10};
 
