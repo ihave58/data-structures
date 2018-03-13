@@ -27,6 +27,10 @@ function isEven(number) {
     return !(number % 2);
 }
 
+function divideByTwo(number) {
+    return Math.floor(number / 2);
+}
+
 function findMedian(sortedArray) {
     let median,
         arrayLength = sortedArray.length;
@@ -40,18 +44,19 @@ function findMedian(sortedArray) {
     return median;
 }
 
-function _getMedian(sortedArray1, sortedArray2, length) {
+function _getMedian(sortedArray1, sortedArray2) {
     let median1,
-        median2;
+        median2,
+        length = sortedArray1.length;
 
-    console.info(sortedArray1, sortedArray2, length);
+    console.info(sortedArray1, sortedArray2);
 
     if(length <= 0) {
-        throw new Error('invalidLengthException');
+        throw new Error('invalidArrayLengthException');
     }
 
     if(length === 1) {
-        return Math.floor((sortedArray1[0] + sortedArray2[0]) / 2);
+        return divideByTwo(sortedArray1[0] + sortedArray2[0]);
     }
 
     if(length === 2) {
@@ -65,30 +70,26 @@ function _getMedian(sortedArray1, sortedArray2, length) {
     if(median1 < median2) {
         if(isEven(length)) {
             return _getMedian(
-                sortedArray1.slice(Math.floor(length / 2) - 1),
-                sortedArray2.slice(0, (Math.floor(length / 2) - 1) + 1),
-                length - (Math.floor(length / 2) - 1)
+                sortedArray1.slice(divideByTwo(length) - 1),
+                sortedArray2.slice(0, divideByTwo(length))
             );
         } else {
             return _getMedian(
-                sortedArray1.slice(Math.floor(length / 2)),
-                sortedArray2.slice(0, Math.floor(length / 2) + 1),
-                length - Math.floor(length / 2)
+                sortedArray1.slice(divideByTwo(length)),
+                sortedArray2.slice(0, divideByTwo(length) + 1)
             );
         }
 
     } else if(median1 > median2) {
         if(isEven(length)) {
             return _getMedian(
-                sortedArray1.slice(0, Math.floor(length / 2) + 1),
-                sortedArray2.slice(Math.floor(length / 2) - 1),
-                length - Math.floor(length / 2) + 1
+                sortedArray1.slice(0, divideByTwo(length) + 1),
+                sortedArray2.slice(divideByTwo(length) - 1)
             );
         } else {
             return _getMedian(
-                sortedArray1.slice(0, Math.floor(length / 2) + 1),
-                sortedArray2.slice(Math.floor(length / 2)),
-                length - Math.floor(length / 2)
+                sortedArray1.slice(0, divideByTwo(length) + 1),
+                sortedArray2.slice(divideByTwo(length))
             );
         }
 
