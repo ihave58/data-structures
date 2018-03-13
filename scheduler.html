@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Scheduler</title>
+        <script type="text/javascript" src="js/scheduler.js"></script>
+    </head>
+
+    <body>
+        <script type="text/javascript">
+            let scheduler = new Scheduler(3);
+
+            for(let counter = 0; counter < 100; counter++) {
+                scheduler.load(counter);
+            }
+        </script>
+    </body>
+
+</html>

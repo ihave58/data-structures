@@ -27,18 +27,20 @@ function _binarySearch(array, item, startIndex, endIndex) {
             midIndex + 1,
             endIndex
         );
-
     }
 }
 
 function _mergeInPlace(array, startIndex, midIndex, endIndex) {
     let array1Index,
         array2Index,
-        lastArray1Item;
+        array1LastItem;
+
+    const array1 = array.slice(startIndex, midIndex + 1);
+    const array2 = array.slice(midIndex + 1, endIndex + 1);
 
     for(array2Index = endIndex; array2Index > midIndex; array2Index--) {
 
-        lastArray1Item = array[midIndex];
+        array1LastItem = array[midIndex];
         for(array1Index = midIndex - 1;
             (array1Index >= startIndex) && (array[array1Index] > array[array2Index]);
             array1Index--) {
@@ -46,11 +48,13 @@ function _mergeInPlace(array, startIndex, midIndex, endIndex) {
             array[array1Index + 1] = array[array1Index];
         }
 
-        if((array1Index != (midIndex - 1)) || (lastArray1Item > array[array2Index])) {
+        if((array1Index != (midIndex - 1)) || (array1LastItem > array[array2Index])) {
             array[array1Index + 1] = array[array2Index];
-            array[array2Index] = lastArray1Item;
+            array[array2Index] = array1LastItem;
         }
     }
+
+    console.info('mergeInPlace:', array1, array2, array);
 }
 
 function mergeInPlace(array1, array2) {
@@ -111,34 +115,42 @@ function selectionSort(array) {
         }
 
         swap(array, minItemIndex, i);
+
+        console.info(array, i, j);
     }
 
-    console.log('timeComplexity:', timeComplexity);
+    console.info('timeComplexity:', timeComplexity);
     return array;
 }
 
 function bubbleSort(array) {
     let i = 0,
         j = i + 1,
-        hasSwappedAtleastOnce,
+        hasSwapped,
         timeComplexity = 0;
 
     array = array.slice();
 
     for(i = 0; i < array.length; i++) {
-        hasSwappedAtleastOnce = false;
 
-        for(j = 0; j < (array.length - 1) && (hasSwappedAtleastOnce === false); j++) {
+        hasSwapped = false;
+        for(j = 0; j < (array.length - 1); j++) {
             if(array[j] > array[j + 1]) {
                 swap(array, j, j + 1);
-                hasSwappedAtleastOnce = true;
+                hasSwapped = true;
             }
 
             timeComplexity++;
         }
+
+        if(!hasSwapped) {
+            break;
+        }
+
+        console.info(array, i, j);
     }
 
-    console.log('timeComplexity:', timeComplexity);
+    console.info('timeComplexity:', timeComplexity);
     return array;
 }
 
@@ -160,13 +172,17 @@ function insertionSort(array) {
         }
 
         array[j + 1] = item;
+
+        console.info(array, i, j);
     }
 
-    console.log('timeComplexity:', timeComplexity);
+    console.info('timeComplexity:', timeComplexity);
     return array;
 }
 
 function _mergeSort(array, startIndex, endIndex, complexity) {
+    console.info(array.slice(startIndex, endIndex + 1));
+
     if(endIndex > startIndex) {
         let midIndex = Math.floor((startIndex + endIndex) / 2);
 
@@ -190,19 +206,21 @@ function mergeSort(array) {
 
     _mergeSort(array, startIndex, endIndex, complexity);
 
-    console.log('timeComplexity:', complexity.time);
+    console.info('timeComplexity:', complexity.time);
     return array;
 }
 
-function doPartition(array, startIndex, endIndex) {
+function partitionPivot(array, startIndex, endIndex) {
     let index = startIndex,
         sortedPartitionIndex = index - 1,
         pivot = array[endIndex];
 
     while(index < endIndex) {
         if(array[index] < pivot) {
+
             sortedPartitionIndex++;
             swap(array, sortedPartitionIndex, index);
+            console.info('swap:', array[index], array[sortedPartitionIndex], array);
         }
 
         index++;
@@ -210,16 +228,15 @@ function doPartition(array, startIndex, endIndex) {
 
     sortedPartitionIndex++;
     swap(array, sortedPartitionIndex, endIndex);
+    console.info('swap-:', array[endIndex], array[sortedPartitionIndex], array);
 
-    // console.log(array);
+    console.info(array);
     return sortedPartitionIndex;
 }
 
 function _quickSort(array, startIndex, endIndex, complexity) {
-    // console.log(startIndex, endIndex);
-
     if(endIndex > startIndex) {
-        let pivotIndex = doPartition(array, startIndex, endIndex);
+        let pivotIndex = partitionPivot(array, startIndex, endIndex);
 
         _quickSort(array, startIndex, pivotIndex - 1, complexity);
         _quickSort(array, pivotIndex + 1, endIndex, complexity);
@@ -239,7 +256,7 @@ function quickSort(array) {
 
     _quickSort(array, startIndex, endIndex, complexity);
 
-    console.log('timeComplexity:', complexity.time);
+    console.info('timeComplexity:', complexity.time);
     return array;
 }
 
@@ -268,25 +285,25 @@ function heapify(array, heapSize, index, complexity) {
 }
 
 function heapSort(array) {
-    let heapifyIndex,
+    let heapIndex,
         complexity = {
             time: 0
         };
 
     array = array.slice();
 
-    for(heapifyIndex = (Math.floor(array.length / 2) - 1); heapifyIndex >= 0; heapifyIndex--) {
-        heapify(array, array.length, heapifyIndex, complexity);
+    for(heapIndex = (Math.floor(array.length / 2) - 1); heapIndex >= 0; heapIndex--) {
+        heapify(array, array.length, heapIndex, complexity);
     }
 
-    for(heapifyIndex = array.length - 1; heapifyIndex >= 0; heapifyIndex--) {
+    for(heapIndex = array.length - 1; heapIndex >= 0; heapIndex--) {
         // Move current root to end
-        swap(array, 0, heapifyIndex);
+        swap(array, 0, heapIndex);
 
         // call max heapify on the reduced heap
-        heapify(array, heapifyIndex, 0, complexity);
+        heapify(array, heapIndex, 0, complexity);
     }
 
-    console.log('timeComplexity:', complexity.time);
+    console.info('timeComplexity:', complexity.time);
     return array;
 }
