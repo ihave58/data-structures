@@ -36,9 +36,9 @@ function findMedian(sortedArray) {
         arrayLength = sortedArray.length;
 
     if(isEven(arrayLength)) {
-        median = (sortedArray[Math.floor(arrayLength / 2)] + sortedArray[Math.floor(arrayLength / 2) - 1]) / 2;
+        median = (sortedArray[divideByTwo(arrayLength)] + sortedArray[divideByTwo(arrayLength) - 1]) / 2;
     } else {
-        median = sortedArray[Math.floor(arrayLength / 2)];
+        median = sortedArray[divideByTwo(arrayLength)];
     }
 
     return median;

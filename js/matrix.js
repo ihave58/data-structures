@@ -80,7 +80,7 @@ function printSpiral(matrix) {
         bottomIndex = (matrixHeight - 1),
         index;
 
-    while((leftIndex < rightIndex) && (topIndex < bottomIndex)) {
+    while((leftIndex <= rightIndex) && (topIndex <= bottomIndex)) {
         // printing Top row
         for(index = leftIndex; index <= rightIndex; index++) {
             visualBuffer.push(matrix[topIndex][index]);
@@ -128,12 +128,12 @@ function countAllPossiblePathsRecursive(matrix, i, j, x, y, path) {
     }
 
     path.push({
-        i: i,
-        j: j
+        i,
+        j
     });
 
     if((i === x) && (j === y)) {
-        console.log(printPath(path));
+        // console.log(printPath(path));
 
         return 1;
     }
@@ -200,8 +200,8 @@ function getShortestPath(matrix, i, j, x, y, path) {
     }
 
     path.push({
-        i: i,
-        j: j
+        i,
+        j
     });
 
     if((i === x) && (j === y)) {
@@ -215,12 +215,10 @@ function getShortestPath(matrix, i, j, x, y, path) {
 }
 
 function countZeroes(matrix) {
-    let matrixLength = matrix.length,
-        rowIndex = matrixLength - 1,
-        colIndex = 0,
+    let rowIndex = matrix.length - 1,
         count = 0;
 
-    while(colIndex < matrixLength) {
+    for(let colIndex = 0; colIndex < matrix.length; colIndex++) {
 
         // move up until you find a 0
         while(rowIndex >= 0 && matrix[rowIndex][colIndex] > 0) {
@@ -229,32 +227,30 @@ function countZeroes(matrix) {
 
         // add 0s present in current column to result
         count += (rowIndex + 1);
-
-        // move right to next column
-        colIndex++;
     }
 
     return count;
 }
 
 function countNegativeNumbers1(matrix) {
-    let matrixLength = matrix.length,
-        rowIndex = matrixLength - 1,
-        colIndex = 0,
+    let rowIndex = matrix.length - 1,
         count = 0;
 
-    while(colIndex < matrixLength) {
+    for(let colIndex = 0; colIndex < matrix.length; colIndex++) {
 
         // move up until you find a number lesser than 0
         while(rowIndex >= 0 && matrix[rowIndex][colIndex] >= 0) {
+            // console.info(
+            //     'rowIndex:', rowIndex,
+            //     'colIndex:', colIndex,
+            //     'matrix[rowIndex][colIndex]:', matrix[rowIndex][colIndex]
+            // );
+
             rowIndex--;
         }
 
         // add 0s present in current column to result
         count += (rowIndex + 1);
-
-        // move right to next column
-        colIndex++;
     }
 
     return count;
@@ -268,7 +264,11 @@ function countNegativeNumbers2(matrix) {
         count = 0;
 
     while(rowIndex < matrixHeight && colIndex >= 0) {
-        // console.log(rowIndex, colIndex, ' -> ', matrix[rowIndex][colIndex]);
+        // console.info(
+        //     'rowIndex:', rowIndex,
+        //     'colIndex:', colIndex,
+        //     'matrix[rowIndex][colIndex]:', matrix[rowIndex][colIndex]
+        // );
 
         if(matrix[rowIndex][colIndex] < 0) {
             count += colIndex + 1;

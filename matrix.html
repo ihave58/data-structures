@@ -7,55 +7,67 @@
     </head>
     <body>
         <script type="text/javascript">
-            const matrix = [
-                [1, 2, 3, 4],
-                [5, 6, 7, 8],
-                [9, 10, 11, 12],
-                [13, 14, 15, 16]
-            ];
+            // const matrix1 = [
+            //     [1, 2, 3, 4],
+            //     [5, 6, 7, 8],
+            //     [9, 10, 11, 12],
+            //     [13, 14, 15, 16]
+            // ];
+            //
+            // const matrix1 = [
+            //     [1, 2, 3, 4, 5],
+            //     [6, 7, 8, 9, 10],
+            //     [11, 12, 13, 14, 15],
+            //     [16, 17, 18, 19, 20],
+            //     [21, 22, 23, 24, 25]
+            // ];
+            //
+            // console.log('matrix:');
+            // console.table(matrix1);
+            //
+            // console.log('spiral:', printSpiral(matrix1));
+            //
+            // console.log('clockwise90:');
+            // console.table(rotateClockwise90(matrix1));
+            //
+            // console.log('antiClockwise90:');
+            // console.table(rotateCounterClockwise90(matrix1));
 
-            console.log('matrix:');
+            // const sortedMatrix2 = [
+            //     [-1, -1, 0, 0, 1],
+            //     [-1, -1, 0, 1, 1],
+            //     [-1, 0, 0, 1, 1],
+            //     [0, 1, 1, 1, 1],
+            //     [1, 1, 1, 1, 1]
+            // ];
+            // console.table(sortedMatrix2);
+            // console.log('countZeroes:', countZeroes(sortedMatrix2));
+            // console.log('countNegativeNumbers1:', countNegativeNumbers1(sortedMatrix2));
+            // console.log('countNegativeNumbers2:', countNegativeNumbers2(sortedMatrix2));
+            //
+            // const matrix3 = [
+            //     [-1, -1, -1, -1, -1],
+            //     [-1, -1, -1, -1, -1],
+            //     [-1, -1, -1, -1, -1],
+            //     [-1, -1, -1, -1, -1],
+            //     [-1, -1, -1, -1, -1]
+            // ];
+            // console.log('matrix:', matrix3);
+            // console.log('countNegativeNumbers1:', countNegativeNumbers1(matrix3));
+            // console.log('countNegativeNumbers2:', countNegativeNumbers2(matrix3));
+
+            let matrix = [
+                    [1, 1, 1, 1],
+                    [1, 1, 0, 1],
+                    [0, 1, 0, 1],
+                    [0, 1, 1, 1]
+                ],
+                width = matrix[0].length,
+                height = matrix.length;
+
             console.table(matrix);
-
-            console.log('spiral:', printSpiral(matrix));
-
-            console.log('clockwise90:');
-            console.table(rotateClockwise90(matrix));
-
-            console.log('antiClockwise90:');
-            console.table(rotateCounterClockwise90(matrix));
-
-            const matrix1 = [
-                [-1, 0, 0, 0, 1],
-                [0, 0, 0, 1, 1],
-                [0, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1]
-            ];
-            console.log('matrix:', matrix);
-            console.log('countZeroes:', countZeroes(matrix));
-
-            const matrix2 = [
-                [-1, -1, 0, 0, 1],
-                [-1, -1, 0, 1, 1],
-                [-1, 0, 0, 1, 1],
-                [0, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1]
-            ];
-            console.log('matrix:', matrix2);
-            console.log('countNegativeNumbers1:', countNegativeNumbers1(matrix2));
-            console.log('countNegativeNumbers2:', countNegativeNumbers2(matrix2));
-
-            const matrix3 = [
-                [-1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1]
-            ];
-            console.log('matrix:', matrix3);
-            console.log('countNegativeNumbers1:', countNegativeNumbers1(matrix3));
-            console.log('countNegativeNumbers2:', countNegativeNumbers2(matrix3));
+            console.log('countAllPossiblePathsRecursive:', countAllPossiblePathsRecursive(matrix, 0, 0, width - 1, height - 1, []));
+            console.log('countAllPossiblePathsDP:', countAllPossiblePathsDP(matrix, 0, 0, width - 1, height - 1));
         </script>
     </body>
 </html>

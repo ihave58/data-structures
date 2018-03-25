@@ -261,26 +261,26 @@ function quickSort(array) {
 }
 
 function heapify(array, heapSize, index, complexity) {
-    let parentIndex = index,  // Initialize largest as root
-        leftChildIndex = 2 * index + 1,  // left = 2*i + 1
-        rightChildIndex = 2 * index + 2;  // right = 2*i + 2
+    let smallestElemIndex = index,
+        leftChildIndex = 2 * index + 1,
+        rightChildIndex = 2 * index + 2;
 
     complexity.time++;
 
     // If left child is larger than root
-    if(leftChildIndex < heapSize && array[leftChildIndex] > array[parentIndex])
-        parentIndex = leftChildIndex;
+    if(leftChildIndex < heapSize && array[leftChildIndex] > array[smallestElemIndex])
+        smallestElemIndex = leftChildIndex;
 
     // If right child is larger than largest so far
-    if(rightChildIndex < heapSize && array[rightChildIndex] > array[parentIndex])
-        parentIndex = rightChildIndex;
+    if(rightChildIndex < heapSize && array[rightChildIndex] > array[smallestElemIndex])
+        smallestElemIndex = rightChildIndex;
 
     // If largest is not root
-    if(parentIndex != index) {
-        swap(array, index, parentIndex);
+    if(smallestElemIndex != index) {
+        swap(array, index, smallestElemIndex);
 
         // Recursively heapify the affected sub-tree
-        heapify(array, heapSize, parentIndex, complexity);
+        heapify(array, heapSize, smallestElemIndex, complexity);
     }
 }
 

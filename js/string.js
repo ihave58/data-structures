@@ -21,11 +21,17 @@ function _addCharToString(string, char, index) {
     return newString.join('');
 }
 
+function _replaceAt(string, index, character) {
+    return string.substr(0, index) + character + string.substr(index + character.length);
+}
+
 function getPermutation(string) {
     let combinations = [],
         char,
         substring,
         substringCombinations;
+
+    console.info('string:', string);
 
     if(string.length === 1) {
         combinations.push(string);
@@ -40,6 +46,8 @@ function getPermutation(string) {
             }
         });
     }
+
+    console.info('combinations:', combinations);
 
     return combinations;
 }
@@ -69,6 +77,14 @@ function getSubSequencePermutation(string) {
             if(counter & (1 << index)) {
                 subSequence.push(string[index]);
             }
+
+            console.info(
+                'counter:', counter,
+                'index:', index,
+                '1 << index:', 1 << index,
+                'counter & (1 << index):', counter & (1 << index),
+                'subSequence:', subSequence
+            );
         }
 
         permutations.push(subSequence.join(''));
@@ -99,36 +115,47 @@ function findPattern(pattern, string) {
     }
 }
 
-function getLongestPalindromicSubSequence(string) {
-    let startIndex = 0,
-        endIndex = string.length - 1,
-        counter = 0;
+function _getLongestSubSequencePalindrome(string, startIndex, endIndex, complexity) {
+    let palindromeLength;
 
-    function _getLongestSubSequencePalindrome(string, startIndex, endIndex) {
-        let palindromeLength;
+    complexity.time++;
 
-        counter++;
+    console.log(
+        'string:', string,
+        'startIndex:', startIndex,
+        'endIndex:', endIndex
+    );
 
-        if(startIndex === endIndex) {
-            palindromeLength = 1;
-        } else if(string[startIndex] === string[endIndex]) {
-            if(endIndex - startIndex === 1) {
-                palindromeLength = 2;
-            } else {
-                palindromeLength = _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex - 1) + 2;
-            }
+    if(startIndex === endIndex) {
+        palindromeLength = 1;
+    } else if(string[startIndex] === string[endIndex]) {
+        if(endIndex - startIndex === 1) {
+            palindromeLength = 2;
         } else {
-            palindromeLength = Math.max(
-                _getLongestSubSequencePalindrome(string, startIndex, endIndex - 1),
-                _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex)
-            );
+            palindromeLength = _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex - 1, complexity) + 2;
         }
-
-        return palindromeLength;
+    } else {
+        palindromeLength = Math.max(
+            _getLongestSubSequencePalindrome(string, startIndex, endIndex - 1, complexity),
+            _getLongestSubSequencePalindrome(string, startIndex + 1, endIndex, complexity)
+        );
     }
 
-    console.log('counter:', counter);
-    return _getLongestSubSequencePalindrome(string, startIndex, endIndex);
+    console.log('palindromeLength:', palindromeLength);
+
+    return palindromeLength;
+}
+
+function getLongestPalindromicSubSequence(string) {
+    let longestSubSequence,
+        complexity = {
+            time: 0
+        };
+
+    longestSubSequence = _getLongestSubSequencePalindrome(string, 0, string.length - 1, complexity);
+
+    console.log('Time complexity:', complexity.time);
+    return longestSubSequence;
 }
 
 function lengthOfLongestSubstring(subSequenceSubject, subStringSubject) {
@@ -160,11 +187,13 @@ function lengthOfLongestSubstringWithUniqueCharacters(string) {
 
 function longestPalindromicSubString(string) {
     let subString,
-        index = 0,
+        index,
         current = 0,
         collection = [];
 
     while(current < string.length) {
+        index = 0;
+
         while(((current - index) >= 0) && ((current + index) < string.length)) {
             subString = string.slice(current - index, current + index + 1);
 
@@ -178,8 +207,30 @@ function longestPalindromicSubString(string) {
         }
 
         current++;
-        index = 0;
     }
 
     return collection;
+}
+
+function removeDuplicates(string) {
+    let uniqueStringIndex,
+        uniqueStringLength = 1;
+
+    for(let stringIndex = 1; stringIndex < string.length; stringIndex++) {
+        for(uniqueStringIndex = 0; uniqueStringIndex < uniqueStringLength; uniqueStringIndex++) {
+
+            if(string[uniqueStringIndex] === string[stringIndex]) {
+                break;
+            }
+        }
+
+        if(uniqueStringIndex === uniqueStringLength) {
+            string = _replaceAt(string, uniqueStringLength, string[stringIndex]);
+            uniqueStringLength++;
+        }
+    }
+
+    string = _replaceAt(string, uniqueStringLength, 0);
+
+    return string;
 }

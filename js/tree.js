@@ -231,25 +231,6 @@ class Tree {
 
     parseBFSRecursive() {
         throw new Error('notImplementedException');
-
-        let oThis = this,
-            array = [],
-            queue = new Queue(),
-            node;
-
-        queue.enqueue(oThis.root);
-        while(!queue.isEmpty()) {
-            node = queue.dequeue();
-
-            if(node) {
-                array.push(node.data);
-
-                queue.enqueue(node.left);
-                queue.enqueue(node.right);
-            }
-        }
-
-        return array;
     }
 
     parseBFSIterativeSpirallyStacks() {
