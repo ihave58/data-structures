@@ -111,7 +111,7 @@ function printPath(path) {
 
 function countAllPossiblePathsRecursive(matrix, i, j, x, y, path) {
     //made path pass by value
-    path = Array.prototype.slice.call(path);
+    path = path.slice();
 
     if(!isValidPath(matrix, i, j, x, y)) {
         return 0;
