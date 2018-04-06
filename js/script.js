@@ -38,9 +38,6 @@ function testShortestPath() {
 
     console.log('countAllPossiblePathsRecursive:', countAllPossiblePathsRecursive(matrix, 0, 0, width - 1, height - 1, []));
     console.log('countAllPossiblePathsDP:', countAllPossiblePathsDP(matrix, 0, 0, width - 1, height - 1));
-
-    debugger;
-    console.log('shortestPath:', getShortestPath(matrix, 0, 0, width - 1, height - 1, []));
 }
 
 function testCountAllPossiblePaths() {

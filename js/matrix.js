@@ -1,16 +1,6 @@
 // https://leetcode.com/discuss/20589/a-common-method-to-rotate-the-image
 'use strict';
 
-function ArrayClass(width, height) {
-    let array = [];
-
-    for(let i = 0; i < height; i++) {
-        array.push(new Array(width));
-    }
-
-    return array;
-}
-
 function isValidPath(matrix, i, j, x, y) {
     return (
         (i >= 0) && (i <= x)
@@ -148,7 +138,7 @@ function countAllPossiblePathsDP(matrix, i, j, x, y) {
         isConnectedPath,
         height = matrix.length,
         width = matrix[0].length,
-        results = new ArrayClass(width, height);
+        results = new ArrayClass(height, width);
 
     results[0][0] = 1;
 
@@ -190,28 +180,6 @@ function countAllPossiblePathsDP(matrix, i, j, x, y) {
     }
 
     return results[height - 1][width - 1];
-}
-
-function getShortestPath(matrix, i, j, x, y, path) {
-    path = Array.prototype.slice.call(path);
-
-    if(!isValidPath(matrix, i, j, x, y)) {
-        return 0;
-    }
-
-    path.push({
-        i,
-        j
-    });
-
-    if((i === x) && (j === y)) {
-        console.log(printPath(path));
-
-        return 1;
-    }
-
-    return getShortestPath(matrix, i, j + 1, x, y, path)
-        + getShortestPath(matrix, i + 1, j, x, y, path);
 }
 
 function countZeroes(matrix) {

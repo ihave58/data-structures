@@ -101,3 +101,58 @@ function _getMedian(sortedArray1, sortedArray2) {
 function getMedian(sortedArray1, sortedArray2) {
     return _getMedian(sortedArray1, sortedArray2, sortedArray1.length);
 }
+
+function findMaximumProductTriplet(array) {
+    let leftMaxArray = new Array(array.length),
+        leftMinArray = new Array(array.length),
+        rightMaxArray = new Array(array.length),
+        rightMinArray = new Array(array.length),
+        leftMinElement,
+        leftMaxElement,
+        rightMinElement,
+        rightMaxElement,
+        tripletProducts = [];
+
+    for(let index = 1; index < array.length; index++) {
+        leftMinElement = leftMinArray[index - 1] || array[0];
+        leftMaxElement = leftMaxArray[index - 1] || array[0];
+
+        leftMinArray[index] = Math.min(array[index - 1], leftMinElement);
+        leftMaxArray[index] = Math.max(array[index - 1], leftMaxElement);
+    }
+
+    for(let index = array.length - 2; index >= 0; index--) {
+        rightMinElement = rightMinArray[index + 1] || array[array.length - 1];
+        rightMaxElement = rightMaxArray[index + 1] || array[array.length - 1];
+
+        rightMinArray[index] = Math.min(array[index + 1], rightMinElement);
+        rightMaxArray[index] = Math.max(array[index + 1], rightMaxElement);
+    }
+
+    for(let index = 1; index < array.length - 1; index++) {
+        console.log(
+            array[index] * leftMinArray[index] * rightMinArray[index],
+            array[index] * leftMaxArray[index] * rightMaxArray[index],
+            array[index] * leftMinArray[index] * rightMaxArray[index],
+            array[index] * leftMaxArray[index] * rightMinArray[index]
+        );
+
+        tripletProducts.push(
+            Math.max(
+                array[index] * leftMinArray[index] * rightMinArray[index],
+                array[index] * leftMaxArray[index] * rightMaxArray[index],
+                array[index] * leftMinArray[index] * rightMaxArray[index],
+                array[index] * leftMaxArray[index] * rightMinArray[index]
+            )
+        );
+    }
+
+    console.info(array);
+    console.info(leftMinArray);
+    console.info(rightMinArray);
+    console.info(leftMaxArray);
+    console.info(rightMaxArray);
+    console.info(tripletProducts);
+
+    return Math.max.apply(null, tripletProducts);
+}
