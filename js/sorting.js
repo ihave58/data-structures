@@ -181,7 +181,7 @@ function insertionSort(array) {
 }
 
 function _mergeSort(array, startIndex, endIndex, complexity) {
-    console.info(array.slice(startIndex, endIndex + 1));
+    console.info('sort:', array.slice(startIndex, endIndex + 1));
 
     if(endIndex > startIndex) {
         let midIndex = Math.floor((startIndex + endIndex) / 2);

@@ -6,28 +6,26 @@
     </head>
     <body>
         <script type="text/javascript">
-            String.prototype.replaceAt = function (index, character) {
-                return this.substr(0, index) + character + this.substr(index + character.length);
-            };
-
             function removeDuplicateElements(array) {
-                var index,
+                let index,
                     uniqueIndex,
                     uniqueLength = 1;
 
-                for (index = 1; index < array.length; index++) {
-                    for (uniqueIndex = 0; uniqueIndex < uniqueLength; uniqueIndex++) {
-                        if (array[uniqueIndex] === array[index]) {
+                for(index = 1; index < array.length; index++) {
+                    for(uniqueIndex = 0; uniqueIndex < uniqueLength; uniqueIndex++) {
+                        if(array[uniqueIndex] === array[index]) {
                             break;
                         }
                     }
 
-                    if (uniqueIndex === uniqueLength) {
+                    if(uniqueIndex === uniqueLength) {
                         array[uniqueLength] = array[index];
                         uniqueLength++;
                     } else {
                         array[uniqueLength] = 'x';
                     }
+
+                    console.debug(array);
                 }
 
                 return array;

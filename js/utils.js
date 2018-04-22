@@ -45,7 +45,7 @@ const debounce = (callback, wait, leading, trailing) => {
 
             inDebounce = false;
         }, wait);
-    }
+    };
 };
 
 const throttle = (callback, limit, leading, trailing) => {

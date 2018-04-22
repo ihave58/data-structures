@@ -19,25 +19,25 @@
             // let preOrderArray = [1, 2, 4, 5, 3, 6];
             // let inOrderArray = [4, 2, 5, 1, 6, 3];
 
-            let preOrderArray = [1, 2, 4, 5, 3, 6];
-            let inOrderArray = [4, 2, 5, 1, 6, 3];
+            // let preOrderArray = [1, 2, 4, 5, 3, 6];
+            // let inOrderArray = [4, 2, 5, 1, 6, 3];
 
-            let tree = new Tree(preOrderArray, inOrderArray);
-
+            // let oTree = new Tree(preOrderArray, inOrderArray);
             // console.log('preOrderArray:', preOrderArray);
             // console.log('inOrderArray:', inOrderArray);
-            console.info('tree:', tree);
-
+            // console.info('tree:', JSON.stringify(oTree, ['root', 'data', 'left', 'right']));
+            // oTree.connectLeftToRightNodes();
+            // console.log('connectLeftToRightNodes:', oTree.root);
             // console.log('traversePreOrderRecursive', tree.traversePreOrderRecursive());
             // console.log('traverseInOrderRecursive', tree.traverseInOrderRecursive());
-            console.log('parseBFSIterative', tree.parseBFSIterative());
+            // console.log('parseLevelOrder', tree.parseLevelOrder());
             // console.log('isComplete', tree.isComplete());
 
             // console.log('parseDFSRecursive', tree.parseDFSRecursive());
 
             // console.log('traversePreOrderIterative', tree.traversePreOrderIterative());
             // console.log("traverseInOrderIterative", tree.traverseInOrderIterative());
-            // console.log('parseBFSIterative', tree.parseBFSIterative());
+            // console.log('parseLevelOrder', tree.parseLevelOrder());
 
             //            console.log("parseBFSIterativeSpirallyStacks", tree.parseBFSIterativeSpirallyStacks());
 
@@ -45,6 +45,34 @@
             //            console.log("computeLeafsLoadIterative: ", tree.computeLeafsLoadIterative());
 
             // console.log('findLargestButK', tree.findLargestButK());
+            const oTree = new Tree(JSON.stringify({
+                'root': {
+                    'data': 7,
+                    'left': {
+                        'data': 10,
+                        'left': {
+                            'data': 4
+                        },
+                        'right': {
+                            'data': 3,
+                            'left': {
+                                'data': 1
+                            }
+                        }
+                    },
+                    'right': {
+                        'data': 2,
+                        'left': {
+                            'data': 8,
+                            'left': {
+                                'data': 11
+                            }
+                        }
+                    }
+                }
+            }));
+            // console.log(oTree.findLevel(11));
+            console.log(oTree.findDistance(2, 11));
         </script>
     </body>
 </html>

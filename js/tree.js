@@ -1,3 +1,53 @@
+const getIndexOf = (array, value, end, start) => {
+    start = start || 0;
+    end = end || array.length;
+
+    for(let index = start; index < end; index++) {
+        if(array[index] === value) {
+            return index;
+        }
+    }
+
+    return -1;
+};
+
+const _buildTreeFromPreOrderAndInOrder = (preOrderArray, inOrderArray) => {
+    let rootValue,
+        rootIndexInInOrderArray,
+
+        rootNode,
+        leftSubTreeRootNode,
+        rightSubTreeRootNode;
+
+    if(!preOrderArray.length || !inOrderArray.length) {
+        return;
+    }
+
+    rootValue = preOrderArray[0];
+    rootIndexInInOrderArray = getIndexOf(inOrderArray, rootValue);
+
+    rootNode = new TreeNode(rootValue);
+
+    leftSubTreeRootNode = _buildTreeFromPreOrderAndInOrder(
+        preOrderArray.slice(1),
+        inOrderArray.slice(0, rootIndexInInOrderArray)
+    );
+
+    rightSubTreeRootNode = _buildTreeFromPreOrderAndInOrder(
+        preOrderArray.slice(1 + rootIndexInInOrderArray),
+        inOrderArray.slice(1 + rootIndexInInOrderArray)
+    );
+
+    leftSubTreeRootNode && rootNode.addLeftNode(leftSubTreeRootNode);
+    rightSubTreeRootNode && rootNode.addRightNode(rightSubTreeRootNode);
+
+    return rootNode;
+};
+
+const _buildTreeFromSerialisedTree = (serialisedTree) => {
+    return JSON.parse(serialisedTree);
+};
+
 const _traverseNodePreOrderRecursive = (node, array) => {
     if(node) {
         array.push(node.data);
@@ -37,6 +87,26 @@ const _computeLeafsLoadRecursive = (node, parentLoad, leafLoads) => {
     }
 };
 
+const _findLevel = (node, data, level) => {
+    let newLevel;
+
+    if(!node) {
+        newLevel = -1;
+    } else {
+        if(node.data === data) {
+            newLevel = level;
+        } else {
+            newLevel = _findLevel(node.left, data, level + 1);
+
+            if(newLevel < 0) {
+                newLevel = _findLevel(node.right, data, level + 1);
+            }
+        }
+    }
+
+    return newLevel;
+};
+
 const _findLargestButK = (node, visitedCount, k, foundElement) => {
     if(node) {
         _findLargestButK(node.right, visitedCount, k, foundElement);
@@ -50,13 +120,66 @@ const _findLargestButK = (node, visitedCount, k, foundElement) => {
     }
 };
 
+const _findDistances = (root, nodeData1, nodeData2, level, distances) => {
+    if(!root) return -1;
+
+    if(root.data === nodeData1) {
+        distances.node1Distance = level;
+
+        return root;
+    }
+
+    if(root.data === nodeData2) {
+        distances.node2Distance = level;
+
+        return root;
+    }
+
+    let leftNodeDistance = _findDistances(root.left, nodeData1, nodeData2, level + 1, distances);
+    let rightNodeDistance = _findDistances(root.right, nodeData1, nodeData2, level + 1, distances);
+
+    if(leftNodeDistance && rightNodeDistance) {
+        distances.distance = (distances.node1Distance + distances.node2Distance) - 2 * level;
+
+        return root;
+    }
+
+    return leftNodeDistance ? leftNodeDistance : rightNodeDistance;
+};
+
+const _findDistance = (root, node1Data, node2Data) => {
+    const distances = {
+        node1Distance: -1,
+        node2Distance: -1,
+        distance: 0
+    };
+
+    const lcaNode = _findDistances(root, node1Data, node2Data, 1, distances);
+
+    if((distances.node1Distance >= 0) && (distances.node2Distance >= 0)) {
+        return distances.distance;
+    }
+
+    if(distances.node1Distance >= 0) {
+        return _findLevel(lcaNode, node2Data, 0);
+    }
+
+    if(distances.node2Distance >= 0) {
+        return _findLevel(lcaNode, node1Data, 0);
+    }
+
+    return -1;
+};
+
 class TreeNode {
     constructor(data, leftNode, rightNode) {
         this.data = data;
 
         this.left = leftNode;
         this.right = rightNode;
-        // this.adjacents = [];
+
+        this.rightSibling = null;
+        this.adjacents = [];
     }
 
     addLeftNode(node) {
@@ -65,7 +188,7 @@ class TreeNode {
         }
 
         this.left = node;
-        // this.adjacents.push(node);
+        this.adjacents.push(node);
     }
 
     addRightNode(node) {
@@ -74,7 +197,11 @@ class TreeNode {
         }
 
         this.right = node;
-        // this.adjacents.push(node);
+        this.adjacents.push(node);
+    }
+
+    setRightSibling(node) {
+        this.rightSibling = node;
     }
 
     addNode(node) {
@@ -82,60 +209,27 @@ class TreeNode {
             throw new Error('invalidNode');
         }
 
-        // this.adjacents.push(node);
+        this.adjacents.push(node);
     }
 }
 
 class Tree {
-    constructor(preOrderTraversal, inOrderTraversal) {
-        let oThis = this;
-
-        oThis.preOrderTraversal = preOrderTraversal;
-        oThis.inOrderTraversal = inOrderTraversal;
-
-        if(preOrderTraversal && inOrderTraversal) {
-            oThis.root = oThis.buildTree(preOrderTraversal, inOrderTraversal, preOrderTraversal.length);
-        }
+    constructor() {
+        this.buildTree.apply(this, arguments);
     }
 
-    getIndexOf(array, value, end, start) {
-        start = start || 0;
-        end = end || array.length;
+    buildTree() {
+        switch(arguments.length) {
+            case 1:
+                const parsedTree = _buildTreeFromSerialisedTree.apply(null, arguments);
+                this.root = parsedTree.root;
 
-        for(let index = start; index < end; index++) {
-            if(array[index] === value) {
-                return index;
-            }
+                break;
+
+            case 2:
+                this.root = _buildTreeFromPreOrderAndInOrder.apply(null, arguments);
+                break;
         }
-
-        return -1;
-    }
-
-    buildTree(preOrderArray, inOrderArray) {
-        let oThis = this,
-            rootValue,
-            rootIndexInInOrderArray,
-
-            rootNode,
-            leftSubTreeRootNode,
-            rightSubTreeRootNode;
-
-        rootValue = preOrderArray[0];
-        rootIndexInInOrderArray = oThis.getIndexOf(inOrderArray, rootValue);
-
-        rootNode = new TreeNode(rootValue);
-
-        if(!preOrderArray.length || !inOrderArray.length) {
-            return;
-        }
-
-        leftSubTreeRootNode = oThis.buildTree(preOrderArray.slice(1), inOrderArray.slice(0, rootIndexInInOrderArray));
-        rightSubTreeRootNode = oThis.buildTree(preOrderArray.slice(1 + rootIndexInInOrderArray), inOrderArray.slice(1 + rootIndexInInOrderArray));
-
-        leftSubTreeRootNode && rootNode.addLeftNode(leftSubTreeRootNode);
-        rightSubTreeRootNode && rootNode.addRightNode(rightSubTreeRootNode);
-
-        return rootNode;
     }
 
     traversePreOrderRecursive() {
@@ -208,7 +302,7 @@ class Tree {
         return array;
     }
 
-    parseBFSIterative() {
+    parseLevelOrder() {
         let oThis = this,
             array = [],
             queue = new Queue(),
@@ -218,19 +312,18 @@ class Tree {
         while(!queue.isEmpty()) {
             node = queue.dequeue();
 
-            if(node) {
-                array.push(node.data);
-
+            if(node.left) {
                 queue.enqueue(node.left);
+            }
+
+            if(node.right) {
                 queue.enqueue(node.right);
             }
+
+            array.push(node.data);
         }
 
         return array;
-    }
-
-    parseBFSRecursive() {
-        throw new Error('notImplementedException');
     }
 
     parseBFSIterativeSpirallyStacks() {
@@ -345,5 +438,48 @@ class Tree {
         _findLargestButK(oThis.root, 0, 3, foundElement);
 
         return foundElement;
+    }
+
+    connectLeftToRightNodes() {
+        let oThis = this,
+            queue = new Queue(),
+            node;
+
+        queue.enqueue(oThis.root);
+        queue.enqueue(null);
+
+        while(!queue.isEmpty()) {
+            node = queue.dequeue();
+
+            if(node) {
+                node.setRightSibling(queue.peek());
+
+                if(node.left) {
+                    queue.enqueue(node.left);
+                }
+
+                if(node.right) {
+                    queue.enqueue(node.right);
+                }
+            } else {
+                if(queue.peek()) {
+                    queue.enqueue(null);
+                }
+            }
+        }
+    }
+
+    findLevel(data) {
+        return _findLevel(this.root, data, 0);
+    }
+
+    findDistance(node1Data, node2Data) {
+        const distances = {
+            node1Distance: -1,
+            node2Distance: -1,
+            distance: 0
+        };
+
+        return _findDistance(this.root, node1Data, node2Data, 1, distances);
     }
 }

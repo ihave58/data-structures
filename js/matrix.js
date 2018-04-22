@@ -179,6 +179,8 @@ function countAllPossiblePathsDP(matrix, i, j, x, y) {
         }
     }
 
+    console.debug('results:', results);
+
     return results[height - 1][width - 1];
 }
 
