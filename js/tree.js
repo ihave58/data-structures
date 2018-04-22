@@ -120,31 +120,35 @@ const _findLargestButK = (node, visitedCount, k, foundElement) => {
     }
 };
 
-const _findDistances = (root, nodeData1, nodeData2, level, distances) => {
-    if(!root) return -1;
+const _findLCANode = (node, nodeData1, nodeData2, level, distances) => {
+    // console.info('node:', node);
 
-    if(root.data === nodeData1) {
+    if(!node) return;
+
+    if(node.data === nodeData1) {
         distances.node1Distance = level;
 
-        return root;
+        return node;
     }
 
-    if(root.data === nodeData2) {
+    if(node.data === nodeData2) {
         distances.node2Distance = level;
 
-        return root;
+        return node;
     }
 
-    let leftNodeDistance = _findDistances(root.left, nodeData1, nodeData2, level + 1, distances);
-    let rightNodeDistance = _findDistances(root.right, nodeData1, nodeData2, level + 1, distances);
+    const leftLCANode = _findLCANode(node.left, nodeData1, nodeData2, level + 1, distances);
+    const rightLCANode = _findLCANode(node.right, nodeData1, nodeData2, level + 1, distances);
 
-    if(leftNodeDistance && rightNodeDistance) {
+    // console.info(node, 'leftLCANode', leftLCANode, 'rightLCANode', rightLCANode);
+
+    if(leftLCANode && rightLCANode) {
         distances.distance = (distances.node1Distance + distances.node2Distance) - 2 * level;
 
-        return root;
+        return node;
     }
 
-    return leftNodeDistance ? leftNodeDistance : rightNodeDistance;
+    return (leftLCANode || rightLCANode);
 };
 
 const _findDistance = (root, node1Data, node2Data) => {
@@ -154,21 +158,17 @@ const _findDistance = (root, node1Data, node2Data) => {
         distance: 0
     };
 
-    const lcaNode = _findDistances(root, node1Data, node2Data, 1, distances);
+    const lcaNode = _findLCANode(root, node1Data, node2Data, 1, distances);
 
     if((distances.node1Distance >= 0) && (distances.node2Distance >= 0)) {
         return distances.distance;
-    }
-
-    if(distances.node1Distance >= 0) {
+    } else if(distances.node1Distance >= 0) {
         return _findLevel(lcaNode, node2Data, 0);
-    }
-
-    if(distances.node2Distance >= 0) {
+    } else if(distances.node2Distance >= 0) {
         return _findLevel(lcaNode, node1Data, 0);
+    } else {
+        return -1;
     }
-
-    return -1;
 };
 
 class TreeNode {
@@ -469,17 +469,21 @@ class Tree {
         }
     }
 
-    findLevel(data) {
-        return _findLevel(this.root, data, 0);
-    }
-
-    findDistance(node1Data, node2Data) {
+    findLCA_Recursive(node1Data, node2Data) {
         const distances = {
             node1Distance: -1,
             node2Distance: -1,
             distance: 0
         };
 
-        return _findDistance(this.root, node1Data, node2Data, 1, distances);
+        return _findLCANode(this.root, node1Data, node2Data, 0, distances);
+    }
+
+    findLevel_Recursive(data) {
+        return _findLevel(this.root, data, 0);
+    }
+
+    findDistance_Recursive(node1Data, node2Data) {
+        return _findDistance(this.root, node1Data, node2Data);
     }
 }

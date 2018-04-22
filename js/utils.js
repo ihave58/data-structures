@@ -1,3 +1,7 @@
+function divideByTwo(number) {
+    return Math.floor(number / 2);
+}
+
 const add = value1 => {
     let sum = value1;
 

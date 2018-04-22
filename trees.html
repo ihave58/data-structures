@@ -46,33 +46,60 @@
 
             // console.log('findLargestButK', tree.findLargestButK());
             const oTree = new Tree(JSON.stringify({
-                'root': {
-                    'data': 7,
-                    'left': {
-                        'data': 10,
-                        'left': {
-                            'data': 4
+                root: {
+                    data: 1,
+                    left: {
+                        data: 2,
+                        left: {
+                            data: 4,
+                            left: {
+                                data: 8,
+                                left: {
+                                    data: 13
+                                }
+                            }
                         },
-                        'right': {
-                            'data': 3,
-                            'left': {
-                                'data': 1
+                        right: {
+                            data: 5,
+                            left: {
+                                data: 9
                             }
                         }
                     },
-                    'right': {
-                        'data': 2,
-                        'left': {
-                            'data': 8,
-                            'left': {
-                                'data': 11
+                    right: {
+                        data: 3,
+                        left: {
+                            data: 6,
+                            left: {
+                                data: 10
+                            },
+                            right: {
+                                data: 11
+                            }
+                        },
+                        right: {
+                            data: 7,
+                            left: {
+                                data: 12,
+                                left: {
+                                    data: 14
+                                }
                             }
                         }
                     }
                 }
             }));
-            // console.log(oTree.findLevel(11));
-            console.log(oTree.findDistance(2, 11));
+
+            // console.log('findLevel_Recursive:', 13, oTree.findLevel_Recursive(13));
+
+            // console.log('findLCA_Recursive(13, 9):', oTree.findLCA_Recursive(13, 9));
+            // console.log('findLCA_Recursive(8, 9):', oTree.findLCA_Recursive(8, 9));
+            // console.log('findLCA_Recursive(10, 11):', oTree.findLCA_Recursive(10, 11));
+
+            console.log('findDistance(13, 14):', oTree.findDistance_Recursive(13, 14));
+            console.log('findDistance(9, 14):', oTree.findDistance_Recursive(9, 14));
+            console.log('findDistance(9, 10):', oTree.findDistance_Recursive(9, 10));
+            console.log('findDistance(2, 9):', oTree.findDistance_Recursive(2, 9));
         </script>
     </body>
 </html>

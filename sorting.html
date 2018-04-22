@@ -4,6 +4,7 @@
     <head lang="en">
         <meta charset="UTF-8">
         <title>Sorting Algorithms</title>
+        <script type="application/javascript" src="./js/utils.js"></script>
         <script type="text/javascript" src="js/sorting.js"></script>
     </head>
 
@@ -43,9 +44,18 @@
             // console.log('SelectionSort:', selectionSort(numbers));
             // console.log('BubbleSort:', bubbleSort(numbers));
             // console.log('InsertionSort:', insertionSort(numbers));
-            console.log('MergeSort:', mergeSort(numbers));
+            // console.log('MergeSort:', mergeSort(numbers));
             // console.log('QuickSort:', quickSort(numbers));
             // console.log('HeapSort:', heapSort(numbers));
+
+            numbers = [7, 8, 9, 1, 2, 3, 4, 5, 6];
+            console.log(numbers, 5, pivotBinarySearch(numbers, 5));
+
+            numbers = [3, 4, 5, 6, 7, 8, 9, 1, 2];
+            console.log(numbers, 5, pivotBinarySearch(numbers, 5));
+
+            numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            console.log(numbers, 5, pivotBinarySearch(numbers, 5));
         </script>
     </body>
 

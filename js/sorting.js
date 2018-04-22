@@ -307,3 +307,39 @@ function heapSort(array) {
     console.info('timeComplexity:', complexity.time);
     return array;
 }
+
+function findPivot(array, startIndex, endIndex) {
+    if(startIndex > endIndex) {
+        return -1;
+    } else if(startIndex === endIndex) {
+        return startIndex;
+    }
+
+    const midIndex = divideByTwo(endIndex + startIndex);
+
+    if((midIndex < endIndex) && (array[midIndex] > array[midIndex + 1])) {
+        return midIndex;
+    } else if((midIndex > startIndex) && (array[midIndex - 1] > array[midIndex])) {
+        return midIndex - 1;
+    } else if(array[startIndex] >= array[midIndex]) {
+        return findPivot(array, startIndex, midIndex - 1);
+    } else {
+        return findPivot(array, midIndex + 1, endIndex);
+    }
+}
+
+function pivotBinarySearch(array, item) {
+    const pivotIndex = findPivot(array, 0, array.length - 1);
+
+    if(pivotIndex === -1) {
+        return _binarySearch(array, item, 0, array.length - 1);
+    }
+
+    if(array[pivotIndex] === item) {
+        return pivotIndex;
+    } else if(array[0] < item) {
+        return _binarySearch(array, item, 0, pivotIndex - 1);
+    } else {
+        return _binarySearch(array, item, pivotIndex + 1, array.length - 1);
+    }
+}

@@ -27,10 +27,6 @@ function isEven(number) {
     return !(number % 2);
 }
 
-function divideByTwo(number) {
-    return Math.floor(number / 2);
-}
-
 function findMedian(sortedArray) {
     let median,
         arrayLength = sortedArray.length;
