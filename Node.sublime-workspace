@@ -1,0 +1,234 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cons",
+				"console"
+			],
+			[
+				"tot",
+				"totalPaths"
+			],
+			[
+				"find",
+				"findShortestPath"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Debu",
+				"Debugger: Open"
+			],
+			[
+				"add",
+				"Debugger: Add Configuration"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"debugg",
+				"Snippet: debugger"
+			],
+			[
+				"viw",
+				"View Package File"
+			],
+			[
+				"Pyth",
+				"Set Syntax: Python"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 498.0,
+		"history":
+		[
+			"console.log(Window)",
+			"window.top.body",
+			"window.document.body",
+			"window.body",
+			"window",
+			"node",
+			"window",
+			"console",
+			"cls",
+			"clear"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/projects/data-structure/project.sublime-workspace",
+		"/D/projects/data-structure/findAllPaths.js",
+		"/D/projects/data-structure/project.sublime-project",
+		"/D/projects/data-structure/findShortestPaths.js",
+		"/D/projects/data-structure/findNumberOfPaths - DP.js",
+		"/D/projects/data-structure/findNumberOfPaths.js",
+		"/D/projects/data-structure/trapped-water.js",
+		"/C/Users/Ihave/AppData/Roaming/Sublime Text/Packages/User/node.sublime-build",
+		"/D/projects/data-structure/node.sublime-build",
+		"/C/Users/Ihave/AppData/Roaming/Sublime Text/Packages/Java/JavaC.sublime-build",
+		"/C/Users/Ihave/AppData/Roaming/Sublime Text/Packages/Python/Python.sublime-build",
+		"/D/Trapped Water",
+		"/D/projects/data-structure/Trapped Water",
+		"/D/projects/coc/app/src/main/assets/csv/3d.csv"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/Node.sublime-build",
+	"project": "Node.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 59.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 592.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 282.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

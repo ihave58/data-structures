@@ -1,0 +1,7 @@
+{
+	"shell_cmd": "node \"$file\"",
+	"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+	"selector": "source.js",
+
+	"env": {"NODE_BUILD_SYSTEM_ENABLED": "true"},
+}
