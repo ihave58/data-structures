@@ -1,29 +1,21 @@
-function permute(nums, startIndex = 0) {
-    if (nums.length - startIndex === 2) {
-        return [
-            [nums[startIndex]],
-            [nums[startIndex + 1]],
-            [nums[startIndex], nums[startIndex + 1]],
-            [nums[startIndex + 1], nums[startIndex]]
-        ];
-    } else {
-        const first = nums[startIndex];
-        const subPermutations = permute(nums, startIndex + 1);
-        const permutations = [...subPermutations, [first]];
+const findCombination = (array, startIndex = 0, combinations, selection) => {
+    if (startIndex > array.length) {
+        return;
+    }
 
-        for (let i = 0; i < subPermutations.length; i++) {
-            for (let j = 0; j <= subPermutations[i].length; j++) {
-                const permutation = [...subPermutations[i]];
-                permutation.splice(j, 0, first);
+    combinations.push(selection);
 
-                permutations.push(permutation);
-            }
-        }
-
-        return permutations;
+    for (let index = startIndex; index <= array.length; index++) {
+        findCombination(array, index + 1, combinations, [...selection, array[index]]);
     }
 };
 
-const array = [1, 2, 3, 4];
-const permutations = permute(array);
-console.log(permutations.map(permutation => permutation.join("")).sort((a, b) => Number(a) - Number(b)), permutations.length);
+function subsets(nums) {
+    const combinations = [];
+    findCombination(nums, 0, combinations, []);
+
+    return combinations;
+};
+
+const array = [1,2,3];
+console.log(subsets(array));

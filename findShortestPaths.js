@@ -26,7 +26,7 @@ const _findAllPaths = (paths, x, y, visited, cache) => {
     }
 
     visited[x][y] = true;
-    
+
     console.log("#", x, y, visited);
 
     if (x < paths.length && y < paths.length && cache[x][y] !== false) {
@@ -44,7 +44,7 @@ const _findAllPaths = (paths, x, y, visited, cache) => {
         const rightPaths = _findAllPaths(paths, x, y + 1, visited, cache);
         const bottomPaths = _findAllPaths(paths, x + 1, y, visited, cache);
         const leftPaths = _findAllPaths(paths, x, y - 1, visited, cache);
- 
+
         if (Array.isArray(leftPaths)) {
             currentPath = [
                 ...currentPath,
@@ -66,7 +66,7 @@ const _findAllPaths = (paths, x, y, visited, cache) => {
             ];
         }
     }
-    
+
     visited[x][y] = false;
     cache[x][y] = currentPath;
     return currentPath;
@@ -94,5 +94,4 @@ const matrix = [
 ];
 
 const allPaths = findAllPaths(matrix);
-console.log("#path count:", allPaths.length);
 console.log("#paths:", allPaths);
