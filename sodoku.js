@@ -1,11 +1,15 @@
 const solveSudoku = function (board) {
     const rowSets = [];
     const colSets = [];
+    const allPossibleNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
     const groupSets = [
         [new Set(), new Set(), new Set()],
         [new Set(), new Set(), new Set()],
         [new Set(), new Set(), new Set()]
     ];
+
+    const possibleSets = [];
 
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
         const rowSet = new Set();
@@ -45,11 +49,51 @@ const solveSudoku = function (board) {
                 }
             }
 
-            groupSets[boardRowIndex / 3][boardColumnIndex / 3] = groupSet;
+            const groupRowIndex = Math.floor(boardRowIndex / 3);
+            const groupColIndex = Math.floor(boardColumnIndex / 3);
+
+            groupSets[groupRowIndex][groupColIndex] = groupSet;
         }
     }
 
-    console.log(rowSets, colSets, groupSets);
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+        const possibleRowSets = [];
+
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            if (board[rowIndex][colIndex] === '.') {
+                const possibleCellSet = new Set(allPossibleNumbers);
+
+                rowSets[rowIndex].values().forEach((value) => possibleCellSet.delete(value));
+                colSets[colIndex].values().forEach((value) => possibleCellSet.delete(value));
+
+                const groupRowIndex = Math.floor(rowIndex / 3);
+                const groupColIndex = Math.floor(colIndex / 3);
+
+                groupSets[groupRowIndex][groupColIndex].values().forEach((value) => possibleCellSet.delete(value));
+
+                possibleRowSets.push(possibleCellSet);
+            } else {
+                possibleRowSets.push('.');
+            }
+        }
+
+        possibleSets.push(possibleRowSets);
+    }
+
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            if (possibleSets[rowIndex][colIndex].size === 1) {
+                board[rowIndex][colIndex] = possibleSets[rowIndex][colIndex].values().toArray()[0];
+
+                possibleSets[rowIndex][colIndex] = ".";
+                rowSets[rowIndex].add(board[rowIndex][colIndex]);
+                colSets[colIndex].add(board[rowIndex][colIndex]);
+            }
+        }
+    }
+
+    // console.log(rowSets, colSets, groupSets);
+    console.dir(board);
 };
 
 
@@ -65,4 +109,4 @@ const board = [
     ['.', '.', '.', '.', '8', '.', '.', '7', '9']
 ];
 
-console.log(solveSudoku(board));
+solveSudoku(board)
