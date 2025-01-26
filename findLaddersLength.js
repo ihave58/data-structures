@@ -1,69 +1,43 @@
-const distance = (word1, word2) => {
-    let matchCount = 0;
+const charList = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-    if (word1.length !== word2.length) {
-        return false;
-    }
+const ladderLength = function (beginWord, endWord, wordList) {
+    const wordSet = new Set(wordList);
+    const queue = new Array(beginWord);
+    const visited = new Set([beginWord]);
+    let changes = 1;
 
-    for (let index = 0; index < word1.length; index++) {
-        if (word1[index] === word2[index]) {
-            matchCount++;
+    while (queue.length) {
+        // console.log('#', queue, visited);
+
+        const queueSize = queue.length;
+
+        for (let index = 0; index < queueSize; index++) {
+            const word = queue.shift();
+            // console.log("#", word);
+
+            if (word === endWord) {
+                return changes;
+            }
+
+            for (let charIndex = 0; charIndex < word.length; charIndex++) {
+                for (let char of charList) {
+                    let newWord = word.split('');
+                    newWord.splice(charIndex, 1, char);
+                    newWord = newWord.join('');
+
+                    if (wordSet.has(newWord) && !visited.has(newWord)) {
+                        queue.push(newWord);
+                        visited.add(newWord);
+                    }
+                }
+            }
         }
+
+        changes++;
     }
 
-    return word1.length - matchCount;
-}
-
-const everyDistance = (wordList) => {
-    for (let index = 0; index < wordList.length - 1; index++) {
-        if (distance(wordList[index], wordList[index + 1]) !== 1) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-const traverse = (wordList, endWord, selection, ladders) => {
-    // console.log('#', selection);
-
-    if (selection.length > wordList.length + 1) {
-        return;
-    }
-
-    if (everyDistance(selection) && selection[selection.length - 1] === endWord) {
-        ladders.push(selection);
-    }
-
-    for (let index = 0; index < wordList.length; index++) {
-        const newSelection = [...selection, wordList[index]];
-
-        if (!selection.includes(wordList[index]) && everyDistance(newSelection)) {
-            traverse(wordList, endWord, newSelection, ladders);
-        }
-    }
-}
-
-/**
- * @param {string} beginWord
- * @param {string} endWord
- * @param {string[]} wordList
- * @return {number}
- */
-var ladderLength = function (beginWord, endWord, wordList) {
-    const ladders = [];
-    let minLength = 0;
-
-    traverse(wordList, endWord, [beginWord], ladders);
-    console.log(ladders);
-
-    if(ladders.length) {
-        minLength = Math.min(...ladders.map(ladder => ladder.length));
-    }
-
-    return minLength;
+    return 0;
 };
-
 
 // const beginWord = 'hit',
 //     endWord = 'cog',

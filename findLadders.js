@@ -61,9 +61,9 @@ var findLadders = function (beginWord, endWord, wordList) {
     return ladders.filter(l => l.length === minLength);
 };
 
-// const beginWord = 'hit',
-//     endWord = 'cog',
-//     wordList = ['hot', 'dot', 'dog', 'lot', 'log', 'cog'];
+const beginWord = 'hit',
+    endWord = 'cog',
+    wordList = ['hot', 'dot', 'dog', 'lot', 'log', 'cog'];
 
 // const beginWord = 'hot',
 //     endWord = 'dog',
@@ -73,8 +73,8 @@ var findLadders = function (beginWord, endWord, wordList) {
 //     endWord = 'cog',
 //     wordList = ['cog'];
 
-const beginWord = 'ta',
-    endWord = 'if',
-    wordList = ["ts","sc","ph","ca","jr","hf","to","if","ha","is","io","cf","ta"];
+// const beginWord = 'ta',
+//     endWord = 'if',
+//     wordList = ['ts', 'sc', 'ph', 'ca', 'jr', 'hf', 'to', 'if', 'ha', 'is', 'io', 'cf', 'ta'];
 
 console.log(findLadders(beginWord, endWord, wordList));
