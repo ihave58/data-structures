@@ -1,16 +1,12 @@
-const exists = (collection, arrayElem) => {
-    const foundElement = collection.find(elem => {
-        let matchIndex = 0;
+const exists = (collection, searchArray) => {
+    const foundElement = collection.find(array => {
+        let startIndex = 0;
 
-        elem.forEach(num => {
-            if (num === arrayElem[matchIndex]) {
-                matchIndex++;
-            } else {
-                matchIndex = 0;
-            }
-        });
+        while(startIndex < searchArray.length && startIndex < array.length && array[startIndex] === searchArray[startIndex]) {
+            startIndex++;
+        }
 
-        return matchIndex === arrayElem.length;
+        return startIndex === searchArray.length && startIndex === array.length;
     });
 
     return !!foundElement;
@@ -46,3 +42,5 @@ var subsetsWithDup = function (nums) {
 // const array = [1, 1, 1, 1, 1];
 const array = [1, 2, 2];
 console.log(subsetsWithDup(array));
+
+
