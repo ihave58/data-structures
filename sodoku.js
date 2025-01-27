@@ -1,4 +1,40 @@
-const getPossibleSets = (board, rowSets, colSets, groupSets) => {
+const getRowSets = (board) => {
+    const rowSets = [];
+
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+        const rowSet = new Set();
+
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            if (board[rowIndex][colIndex] !== '.') {
+                rowSet.add(board[rowIndex][colIndex]);
+            }
+        }
+
+        rowSets[rowIndex] = rowSet;
+    }
+
+    return rowSets;
+}
+
+const getColSets = (board) => {
+    const colSets = [];
+
+    for (let colIndex = 0; colIndex < board.length; colIndex++) {
+        const colSet = new Set();
+
+        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+            if (board[rowIndex][colIndex] !== '.') {
+                colSet.add(board[rowIndex][colIndex]);
+            }
+        }
+
+        colSets[colIndex] = colSet;
+    }
+
+    return colSets;
+}
+
+const getPossibleSets = (board, rowSets, colSets, houseSets) => {
     const possibleSets = [];
     const allPossibleNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -20,7 +56,7 @@ const getPossibleSets = (board, rowSets, colSets, groupSets) => {
                     possibleCellSet.delete(value);
                 }
 
-                for (let value of groupSets[groupRowIndex][groupColIndex].values()) {
+                for (let value of houseSets[groupRowIndex][groupColIndex].values()) {
                     possibleCellSet.delete(value);
                 }
 
@@ -34,6 +70,71 @@ const getPossibleSets = (board, rowSets, colSets, groupSets) => {
     }
 
     return possibleSets;
+}
+
+const getHouseSets = (board) => {
+    const houseSets = [
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()]
+    ];
+
+    for (let boardRowIndex = 0; boardRowIndex < board.length; boardRowIndex += 3) {
+        for (let boardColumnIndex = 0; boardColumnIndex < board[0].length; boardColumnIndex += 3) {
+            const groupSet = new Set();
+
+            for (let rowIndex = boardRowIndex; rowIndex < boardRowIndex + 3; rowIndex++) {
+                for (let colIndex = boardColumnIndex; colIndex < boardColumnIndex + 3; colIndex++) {
+                    const value = board[rowIndex][colIndex];
+
+                    if (value !== '.') {
+                        groupSet.add(value);
+                    }
+                }
+            }
+
+            const groupRowIndex = Math.floor(boardRowIndex / 3);
+            const groupColIndex = Math.floor(boardColumnIndex / 3);
+
+            houseSets[groupRowIndex][groupColIndex] = groupSet;
+        }
+    }
+
+    return houseSets;
+}
+
+const getSmallestSet = (possibleSets) => {
+    let smallestSetRowIndex = 0;
+    let smallestSetColIndex = 0;
+
+    for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
+            if (possibleSets[rowIndex][colIndex] == null) {
+                continue;
+            }
+
+            if ((possibleSets[smallestSetRowIndex][smallestSetColIndex] == null) ||
+                (possibleSets[rowIndex][colIndex].size < possibleSets[smallestSetRowIndex][smallestSetColIndex].size)) {
+
+                smallestSetRowIndex = rowIndex;
+                smallestSetColIndex = colIndex;
+            }
+        }
+    }
+
+    return [smallestSetRowIndex, smallestSetColIndex];
+}
+
+const hasSolved = (possibleSets) => {
+    for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
+            if (possibleSets[rowIndex][colIndex] !== null && possibleSets[rowIndex][colIndex].size === 1) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 const solveEachCell = (board, rowSets, colSets, groupSets, possibleSets) => {
@@ -53,80 +154,25 @@ const solveEachCell = (board, rowSets, colSets, groupSets, possibleSets) => {
     }
 }
 
-const hasPossibleSolution = (board, possibleSets) => {
-    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            if (possibleSets[rowIndex][colIndex] !== null && possibleSets[rowIndex][colIndex].size === 1) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 const solveSudoku = function (board) {
-    const rowSets = [];
-    const colSets = [];
+    const rowSets = getRowSets(board);
+    const colSets = getColSets(board);
+    const houseSets = getHouseSets(board);
 
-    const groupSets = [
-        [new Set(), new Set(), new Set()],
-        [new Set(), new Set(), new Set()],
-        [new Set(), new Set(), new Set()]
-    ];
+    let possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
+    let hasSolution = hasSolved(possibleSets);
 
-    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-        const rowSet = new Set();
+    while (hasSolution) {
+        solveEachCell(board, rowSets, colSets, houseSets, possibleSets);
 
-        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
-            if (board[rowIndex][colIndex] !== '.') {
-                rowSet.add(board[rowIndex][colIndex]);
-            }
-        }
-
-        rowSets[rowIndex] = rowSet;
+        possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
+        hasSolution = hasSolved(possibleSets);
     }
 
-    for (let colIndex = 0; colIndex < board.length; colIndex++) {
-        const colSet = new Set();
+    const stack = [];
+    const [backtrackRowIndex, backtrackColIndex] = getSmallestSet(possibleSets);
 
-        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
-            if (board[rowIndex][colIndex] !== '.') {
-                colSet.add(board[rowIndex][colIndex]);
-            }
-        }
-
-        colSets[colIndex] = colSet;
-    }
-
-    for (let boardRowIndex = 0; boardRowIndex < board.length; boardRowIndex += 3) {
-        for (let boardColumnIndex = 0; boardColumnIndex < board[0].length; boardColumnIndex += 3) {
-            const groupSet = new Set();
-
-            for (let rowIndex = boardRowIndex; rowIndex < boardRowIndex + 3; rowIndex++) {
-                for (let colIndex = boardColumnIndex; colIndex < boardColumnIndex + 3; colIndex++) {
-                    const value = board[rowIndex][colIndex];
-
-                    if (value !== '.') {
-                        groupSet.add(value);
-                    }
-                }
-            }
-
-            const groupRowIndex = Math.floor(boardRowIndex / 3);
-            const groupColIndex = Math.floor(boardColumnIndex / 3);
-
-            groupSets[groupRowIndex][groupColIndex] = groupSet;
-        }
-    }
-
-    let possibleSets = getPossibleSets(board, rowSets, colSets, groupSets);
-
-    while (hasPossibleSolution(board, possibleSets)) {
-        solveEachCell(board, rowSets, colSets, groupSets, possibleSets);
-
-        possibleSets = getPossibleSets(board, rowSets, colSets, groupSets);
-    }
+    console.log(backtrackRowIndex, backtrackColIndex);
 
     // console.log(rowSets, colSets, groupSets);
     console.table(board);
