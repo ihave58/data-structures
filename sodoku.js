@@ -34,6 +34,37 @@ const getColSets = (board) => {
     return colSets;
 }
 
+const getHouseSets = (board) => {
+    const houseSets = [
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()]
+    ];
+
+    for (let boardRowIndex = 0; boardRowIndex < board.length; boardRowIndex += 3) {
+        for (let boardColumnIndex = 0; boardColumnIndex < board[0].length; boardColumnIndex += 3) {
+            const groupSet = new Set();
+
+            for (let rowIndex = boardRowIndex; rowIndex < boardRowIndex + 3; rowIndex++) {
+                for (let colIndex = boardColumnIndex; colIndex < boardColumnIndex + 3; colIndex++) {
+                    const value = board[rowIndex][colIndex];
+
+                    if (value !== '.') {
+                        groupSet.add(value);
+                    }
+                }
+            }
+
+            const groupRowIndex = Math.floor(boardRowIndex / 3);
+            const groupColIndex = Math.floor(boardColumnIndex / 3);
+
+            houseSets[groupRowIndex][groupColIndex] = groupSet;
+        }
+    }
+
+    return houseSets;
+}
+
 const getPossibleSets = (board, rowSets, colSets, houseSets) => {
     const possibleSets = [];
     const allPossibleNumbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -72,37 +103,6 @@ const getPossibleSets = (board, rowSets, colSets, houseSets) => {
     return possibleSets;
 }
 
-const getHouseSets = (board) => {
-    const houseSets = [
-        [new Set(), new Set(), new Set()],
-        [new Set(), new Set(), new Set()],
-        [new Set(), new Set(), new Set()]
-    ];
-
-    for (let boardRowIndex = 0; boardRowIndex < board.length; boardRowIndex += 3) {
-        for (let boardColumnIndex = 0; boardColumnIndex < board[0].length; boardColumnIndex += 3) {
-            const groupSet = new Set();
-
-            for (let rowIndex = boardRowIndex; rowIndex < boardRowIndex + 3; rowIndex++) {
-                for (let colIndex = boardColumnIndex; colIndex < boardColumnIndex + 3; colIndex++) {
-                    const value = board[rowIndex][colIndex];
-
-                    if (value !== '.') {
-                        groupSet.add(value);
-                    }
-                }
-            }
-
-            const groupRowIndex = Math.floor(boardRowIndex / 3);
-            const groupColIndex = Math.floor(boardColumnIndex / 3);
-
-            houseSets[groupRowIndex][groupColIndex] = groupSet;
-        }
-    }
-
-    return houseSets;
-}
-
 const getSmallestSetIndex = (possibleSets) => {
     let smallestSetRowIndex = 0;
     let smallestSetColIndex = 0;
@@ -137,6 +137,69 @@ const hasSolutionCheck = (possibleSets) => {
     return false;
 }
 
+const isValid = (board) => {
+
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+        const rowMap = new Map();
+
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            if (board[rowIndex][colIndex] !== '.') {
+                const count = rowMap.get(board[rowIndex][colIndex]) || 0;
+
+                rowMap.set(board[rowIndex][colIndex], count + 1);
+            }
+        }
+
+        for (let value of rowMap.values()) {
+            if (value > 1) {
+                return false;
+            }
+        }
+    }
+
+    for (let colIndex = 0; colIndex < board.length; colIndex++) {
+        const colMap = new Map();
+
+        for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+            if (board[rowIndex][colIndex] !== '.') {
+                const count = colMap.get(board[rowIndex][colIndex]) || 0;
+
+                colMap.set(board[rowIndex][colIndex], count + 1);
+            }
+        }
+
+        for (let value of colMap.values()) {
+            if (value > 1) {
+                return false;
+            }
+        }
+    }
+
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex += 3) {
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex += 3) {
+            const houseMap = new Map();
+
+            for (let houseRowIndex = rowIndex; houseRowIndex < rowIndex + 3; houseRowIndex++) {
+                for (let houseColIndex = colIndex; houseColIndex < colIndex + 3; houseColIndex++) {
+                    if (board[houseRowIndex][houseColIndex] !== '.') {
+                        const count = houseMap.get(board[houseRowIndex][houseColIndex]) || 0;
+
+                        houseMap.set(board[houseRowIndex][houseColIndex], count + 1);
+                    }
+                }
+            }
+
+            for (let value of houseMap.values()) {
+                if (value > 1) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 const solveSudoku = function (board) {
     const rowSets = getRowSets(board);
     const colSets = getColSets(board);
@@ -160,34 +223,35 @@ const solveSudoku = function (board) {
         hasSolution = hasSolutionCheck(possibleSets);
     }
 
-    // console.log(rowSets, colSets, groupSets);
-    console.table(board);
-    console.dir(possibleSets);
+    console.log(possibleSets);
 };
 
 
-const board = [
-    ['5', '3', '.', '.', '7', '.', '.', '.', '.'],
-    ['6', '.', '.', '1', '9', '5', '.', '.', '.'],
-    ['.', '9', '8', '.', '.', '.', '.', '6', '.'],
-    ['8', '.', '.', '.', '6', '.', '.', '.', '3'],
-    ['4', '.', '.', '8', '.', '3', '.', '.', '1'],
-    ['7', '.', '.', '.', '2', '.', '.', '.', '6'],
-    ['.', '6', '.', '.', '.', '.', '2', '8', '.'],
-    ['.', '.', '.', '4', '1', '9', '.', '.', '5'],
-    ['.', '.', '.', '.', '8', '.', '.', '7', '9']
-];
-
 // const board = [
-//     ['.', '.', '9', '7', '4', '8', '.', '.', '.'],
-//     ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
-//     ['.', '2', '.', '1', '.', '9', '.', '.', '.'],
-//     ['.', '.', '7', '.', '.', '.', '2', '4', '.'],
-//     ['.', '6', '4', '.', '1', '.', '5', '9', '.'],
-//     ['.', '9', '8', '.', '.', '.', '3', '.', '.'],
-//     ['.', '.', '.', '8', '.', '3', '.', '2', '.'],
-//     ['.', '.', '.', '.', '.', '.', '.', '.', '6'],
-//     ['.', '.', '.', '2', '7', '5', '9', '.', '.']
+//     ['5', '3', '.', '.', '7', '.', '.', '.', '.'],
+//     ['6', '.', '.', '1', '9', '5', '.', '.', '.'],
+//     ['.', '9', '8', '.', '.', '.', '.', '6', '.'],
+//     ['8', '.', '.', '.', '6', '.', '.', '.', '3'],
+//     ['4', '.', '.', '8', '.', '3', '.', '.', '1'],
+//     ['7', '.', '.', '.', '2', '.', '.', '.', '6'],
+//     ['.', '6', '.', '.', '.', '.', '2', '8', '.'],
+//     ['.', '.', '.', '4', '1', '9', '.', '.', '5'],
+//     ['.', '.', '.', '.', '8', '.', '.', '7', '9']
 // ];
 
-solveSudoku(board)
+const board = [
+    ['.', '.', '9', '7', '4', '8', '.', '.', '.'],
+    ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '2', '.', '1', '.', '9', '.', '.', '.'],
+    ['.', '.', '7', '.', '.', '.', '2', '4', '.'],
+    ['.', '6', '4', '.', '1', '.', '5', '9', '.'],
+    ['.', '9', '8', '.', '.', '.', '3', '.', '.'],
+    ['.', '.', '.', '8', '.', '3', '.', '2', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '6'],
+    ['.', '.', '.', '2', '7', '5', '9', '.', '.']
+];
+
+solveSudoku(board);
+
+console.log(isValid(board));
+console.table(board);
