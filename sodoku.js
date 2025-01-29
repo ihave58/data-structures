@@ -199,30 +199,29 @@ const isValid = (board) => {
     return true;
 }
 
-const solveSudoku = function (board) {
-    const rowSets = getRowSets(board);
-    const colSets = getColSets(board);
-    const houseSets = getHouseSets(board);
-
-    let possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
-    let hasCompleted = isCompleted(board);
-
-    while (!hasCompleted) {
-        const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
-        const houseRowIndex = Math.floor(rowIndex / 3);
-        const houseColIndex = Math.floor(colIndex / 3);
-
-        const value = board[rowIndex][colIndex] = Array.from(possibleSets[rowIndex][colIndex].values())[0];
-
-        rowSets[rowIndex].add(value);
-        colSets[colIndex].add(value);
-        houseSets[houseRowIndex][houseColIndex].add(value);
-
-        possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
-        hasCompleted = isCompleted(board);
+const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getColSets(board), houseSets = getHouseSets(board)) {
+    if (isCompleted(board)) {
+        return true;
     }
 
-    console.log(possibleSets);
+
+    let possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
+
+    const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
+    const houseRowIndex = Math.floor(rowIndex / 3);
+    const houseColIndex = Math.floor(colIndex / 3);
+
+    for(let value of possibleSets[rowIndex][colIndex].values()) {
+
+    }
+    const value = board[rowIndex][colIndex] = Array.from();
+
+    rowSets[rowIndex].add(value);
+    colSets[colIndex].add(value);
+    houseSets[houseRowIndex][houseColIndex].add(value);
+    possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
+
+
 };
 
 
