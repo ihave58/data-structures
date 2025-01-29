@@ -125,20 +125,19 @@ const getSmallestSetIndex = (possibleSets) => {
     return [smallestSetRowIndex, smallestSetColIndex];
 }
 
-const hasSolutionCheck = (possibleSets) => {
-    for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
-        for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
-            if (possibleSets[rowIndex][colIndex] !== null) {
-                return true;
+const isCompleted = (board) => {
+    for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            if (board[rowIndex][colIndex] === '.') {
+                return false;
             }
         }
     }
 
-    return false;
+    return true;
 }
 
 const isValid = (board) => {
-
     for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
         const rowMap = new Map();
 
@@ -206,9 +205,9 @@ const solveSudoku = function (board) {
     const houseSets = getHouseSets(board);
 
     let possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
-    let hasSolution = hasSolutionCheck(possibleSets);
+    let hasCompleted = isCompleted(board);
 
-    while (hasSolution) {
+    while (!hasCompleted) {
         const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
         const houseRowIndex = Math.floor(rowIndex / 3);
         const houseColIndex = Math.floor(colIndex / 3);
@@ -220,7 +219,7 @@ const solveSudoku = function (board) {
         houseSets[houseRowIndex][houseColIndex].add(value);
 
         possibleSets = getPossibleSets(board, rowSets, colSets, houseSets);
-        hasSolution = hasSolutionCheck(possibleSets);
+        hasCompleted = isCompleted(board);
     }
 
     console.log(possibleSets);
