@@ -36,7 +36,9 @@ const getColSets = (board) => {
 
 const getHouseSets = (board) => {
     const houseSets = [
-        [new Set(), new Set(), new Set()], [new Set(), new Set(), new Set()], [new Set(), new Set(), new Set()]
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()],
+        [new Set(), new Set(), new Set()]
     ];
 
     for (let boardRowIndex = 0; boardRowIndex < board.length; boardRowIndex += 3) {
@@ -71,11 +73,13 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
         const possibleRowSets = [];
 
         for (let colIndex = 0; colIndex < board[rowIndex].length; colIndex++) {
+            const possibleCellSet = new Set();
+
             if (board[rowIndex][colIndex] === '.') {
                 const groupRowIndex = Math.floor(rowIndex / 3);
                 const groupColIndex = Math.floor(colIndex / 3);
 
-                const possibleCellSet = new Set(allPossibleNumbers);
+                allPossibleNumbers.forEach(number => possibleCellSet.add(number));
 
                 for (let value of rowSets[rowIndex].values()) {
                     possibleCellSet.delete(value);
@@ -88,11 +92,9 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
                 for (let value of houseSets[groupRowIndex][groupColIndex].values()) {
                     possibleCellSet.delete(value);
                 }
-
-                possibleRowSets.push(possibleCellSet.size === 0 ? null : possibleCellSet);
-            } else {
-                possibleRowSets.push(null);
             }
+
+            possibleRowSets.push(possibleCellSet);
         }
 
         possibleSets.push(possibleRowSets);
@@ -102,17 +104,14 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
 }
 
 const getSmallestSetIndex = (possibleSets) => {
-    let smallestSetRowIndex = 0;
-    let smallestSetColIndex = 0;
+    let smallestSetRowIndex = -1;
+    let smallestSetColIndex = -1;
 
     for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
         for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
-            if (possibleSets[rowIndex][colIndex] == null) {
-                continue;
-            }
-
-            if ((possibleSets[smallestSetRowIndex][smallestSetColIndex] == null) || (possibleSets[rowIndex][colIndex].size < possibleSets[smallestSetRowIndex][smallestSetColIndex].size)) {
-
+            if ((smallestSetRowIndex < 0 && smallestSetColIndex < 0) ||
+                ((possibleSets[rowIndex][colIndex].size < possibleSets[smallestSetRowIndex][smallestSetColIndex].size) && possibleSets[rowIndex][colIndex].size > 0)
+            ) {
                 smallestSetRowIndex = rowIndex;
                 smallestSetColIndex = colIndex;
             }
@@ -196,7 +195,21 @@ const isValid = (board) => {
     return true;
 }
 
-const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getColSets(board), houseSets = getHouseSets(board)) {
+const deepCopy = (array) => {
+    let copy = [];
+
+    array.forEach(elem => {
+        if (Array.isArray(elem)) {
+            copy.push(deepCopy(elem));
+        } else {
+            copy.push(elem);
+        }
+    });
+
+    return copy;
+}
+
+const solveSudoku = function (board) {
     if (isCompleted(board)) {
         return true;
     }
@@ -205,23 +218,40 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
         return false;
     }
 
-    let possibleSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
+    const rowSets = getRowSets(board);
+    const colSets = getColSets(board);
+    const houseSets = getHouseSets(board);
+    const possibleSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
 
     const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
-    const houseRowIndex = Math.floor(rowIndex / 3);
-    const houseColIndex = Math.floor(colIndex / 3);
+    // const houseRowIndex = Math.floor(rowIndex / 3);
+    // const houseColIndex = Math.floor(colIndex / 3);
 
-    for (let value of possibleSets[rowIndex][colIndex].values()) {
-        board[rowIndex][colIndex] = value;
-
-        rowSets[rowIndex].add(value);
-        colSets[colIndex].add(value);
-        houseSets[houseRowIndex][houseColIndex].add(value);
-
-        solveSudoku(board, rowSets, colSets, houseSets);
+    if (rowIndex < 0 || colIndex < 0) {
+        return true;
     }
 
+    const updatedBoard = deepCopy(board);
 
+    for (let value of possibleSets[rowIndex][colIndex].values()) {
+        // const last = board[rowIndex][colIndex];
+        updatedBoard[rowIndex][colIndex] = value;
+
+        // rowSets[rowIndex].add(value);
+        // colSets[colIndex].add(value);
+        // houseSets[houseRowIndex][houseColIndex].add(value);
+
+        if (solveSudoku(updatedBoard)) {
+            return true;
+        }
+
+        // board[rowIndex][colIndex] = last;
+        // rowSets[rowIndex].delete(value);
+        // colSets[colIndex].delete(value);
+        // houseSets[houseRowIndex][houseColIndex].delete(value);
+    }
+
+    return false;
 };
 
 
@@ -238,10 +268,18 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
 // ];
 
 const board = [
-    ['.', '.', '9', '7', '4', '8', '.', '.', '.'], ['7', '.', '.', '.', '.', '.', '.', '.', '.'], ['.', '2', '.', '1', '.', '9', '.', '.', '.'], ['.', '.', '7', '.', '.', '.', '2', '4', '.'], ['.', '6', '4', '.', '1', '.', '5', '9', '.'], ['.', '9', '8', '.', '.', '.', '3', '.', '.'], ['.', '.', '.', '8', '.', '3', '.', '2', '.'], ['.', '.', '.', '.', '.', '.', '.', '.', '6'], ['.', '.', '.', '2', '7', '5', '9', '.', '.']
+    ['.', '.', '9', '7', '4', '8', '.', '.', '.'],
+    ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '2', '.', '1', '.', '9', '.', '.', '.'],
+    ['.', '.', '7', '.', '.', '.', '2', '4', '.'],
+    ['.', '6', '4', '.', '1', '.', '5', '9', '.'],
+    ['.', '9', '8', '.', '.', '.', '3', '.', '.'],
+    ['.', '.', '.', '8', '.', '3', '.', '2', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '6'],
+    ['.', '.', '.', '2', '7', '5', '9', '.', '.']
 ];
 
-solveSudoku(board);
+console.log(solveSudoku(board));
 
 console.log(isValid(board));
 console.table(board);
