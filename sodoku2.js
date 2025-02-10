@@ -103,6 +103,20 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
     return possibleSets;
 }
 
+const getDirectSetIndices = (possibleSets) => {
+    const setIndices = [];
+
+    for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
+        for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
+            if (possibleSets[rowIndex][colIndex].size === 1) {
+                setIndices.push([rowIndex, colIndex]);
+            }
+        }
+    }
+
+    return setIndices;
+}
+
 const getSmallestSetIndex = (possibleSets) => {
     let smallestSetRowIndex = -1;
     let smallestSetColIndex = -1;
@@ -196,6 +210,28 @@ const isValid = (board) => {
     return true;
 }
 
+const markValue = (board, rowSets, colSets, houseSets, rowIndex, colIndex, value) => {
+    const houseRowIndex = Math.floor(rowIndex / 3);
+    const houseColIndex = Math.floor(colIndex / 3);
+
+    board[rowIndex][colIndex] = value;
+
+    rowSets[rowIndex].add(value);
+    colSets[colIndex].add(value);
+    houseSets[houseRowIndex][houseColIndex].add(value);
+}
+
+const unmarkValue = (board, rowSets, colSets, houseSets, rowIndex, colIndex, value) => {
+    const houseRowIndex = Math.floor(rowIndex / 3);
+    const houseColIndex = Math.floor(colIndex / 3);
+
+    board[rowIndex][colIndex] = '.';
+
+    rowSets[rowIndex].delete(value);
+    colSets[colIndex].delete(value);
+    houseSets[houseRowIndex][houseColIndex].delete(value);
+}
+
 const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getColSets(board), houseSets = getHouseSets(board)) {
     if (isCompleted(board)) {
         return true;
@@ -205,31 +241,34 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
         return false;
     }
 
-    const possibleSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
-    const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
-    const houseRowIndex = Math.floor(rowIndex / 3);
-    const houseColIndex = Math.floor(colIndex / 3);
+    let possibleSolutionSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
+    let solutionSetIndices = getDirectSetIndices(possibleSolutionSets);
+
+    while(solutionSetIndices.length) {
+        for (const [rowIndex, colIndex] of solutionSetIndices) {
+            const value = Array.from(possibleSolutionSets[rowIndex][colIndex].values())[0];
+
+            markValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
+        }
+
+        possibleSolutionSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
+        solutionSetIndices = getDirectSetIndices(possibleSolutionSets);
+    }
+
+    const [rowIndex, colIndex] = getSmallestSetIndex(possibleSolutionSets);
 
     if (rowIndex < 0 || colIndex < 0) {
         return false;
     }
 
-    for (let value of possibleSets[rowIndex][colIndex].values()) {
-        const lastValue = board[rowIndex][colIndex];
-        board[rowIndex][colIndex] = value;
-
-        rowSets[rowIndex].add(value);
-        colSets[colIndex].add(value);
-        houseSets[houseRowIndex][houseColIndex].add(value);
+    for (let value of possibleSolutionSets[rowIndex][colIndex].values()) {
+        markValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
 
         if (solveSudoku(board, rowSets, colSets, houseSets)) {
             return true;
         }
 
-        board[rowIndex][colIndex] = lastValue;
-        rowSets[rowIndex].delete(value);
-        colSets[colIndex].delete(value);
-        houseSets[houseRowIndex][houseColIndex].delete(value);
+        unmarkValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
     }
 
     return false;
@@ -248,17 +287,17 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
 //     ['.', '.', '.', '.', '8', '.', '.', '7', '9']
 // ];
 
-// const board = [
-//     ['.', '.', '9', '7', '4', '8', '.', '.', '.'],
-//     ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
-//     ['.', '2', '.', '1', '.', '9', '.', '.', '.'],
-//     ['.', '.', '7', '.', '.', '.', '2', '4', '.'],
-//     ['.', '6', '4', '.', '1', '.', '5', '9', '.'],
-//     ['.', '9', '8', '.', '.', '.', '3', '.', '.'],
-//     ['.', '.', '.', '8', '.', '3', '.', '2', '.'],
-//     ['.', '.', '.', '.', '.', '.', '.', '.', '6'],
-//     ['.', '.', '.', '2', '7', '5', '9', '.', '.']
-// ];
+const board = [
+    ['.', '.', '9', '7', '4', '8', '.', '.', '.'],
+    ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '2', '.', '1', '.', '9', '.', '.', '.'],
+    ['.', '.', '7', '.', '.', '.', '2', '4', '.'],
+    ['.', '6', '4', '.', '1', '.', '5', '9', '.'],
+    ['.', '9', '8', '.', '.', '.', '3', '.', '.'],
+    ['.', '.', '.', '8', '.', '3', '.', '2', '.'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '6'],
+    ['.', '.', '.', '2', '7', '5', '9', '.', '.']
+];
 
 // const board = [
 //     ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
@@ -272,17 +311,17 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
 //     ['.', '.', '.', '.', '.', '.', '.', '.', '.']
 // ];
 
-const board = [
-    ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '9', '.', '.', '1', '.', '.', '3', '.'],
-    ['.', '.', '6', '.', '2', '.', '7', '.', '.'],
-    ['.', '.', '.', '3', '.', '4', '.', '.', '.'],
-    ['2', '1', '.', '.', '.', '.', '.', '9', '8'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
-    ['.', '.', '2', '5', '.', '6', '4', '.', '.'],
-    ['.', '8', '.', '.', '.', '.', '.', '1', '.'],
-    ['.', '.', '.', '.', '.', '.', '.', '.', '.']
-];
+// const board = [
+//     ['7', '.', '.', '.', '.', '.', '.', '.', '.'],
+//     ['.', '9', '.', '.', '1', '.', '.', '3', '.'],
+//     ['.', '.', '6', '.', '2', '.', '7', '.', '.'],
+//     ['.', '.', '.', '3', '.', '4', '.', '.', '.'],
+//     ['2', '1', '.', '.', '.', '.', '.', '9', '8'],
+//     ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+//     ['.', '.', '2', '5', '.', '6', '4', '.', '.'],
+//     ['.', '8', '.', '.', '.', '.', '.', '1', '.'],
+//     ['.', '.', '.', '.', '.', '.', '.', '.', '.']
+// ];
 
 console.time('program');
 solveSudoku(board);
