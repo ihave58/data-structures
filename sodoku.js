@@ -290,4 +290,4 @@ console.timeEnd('program');
 
 console.log(isValid(board));
 console.log(isCompleted(board));
-console.table(board);
+console.log(board);

@@ -92,6 +92,10 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
                 for (let value of houseSets[groupRowIndex][groupColIndex].values()) {
                     possibleCellSet.delete(value);
                 }
+
+                if (possibleCellSet.size === 0) {
+                    return false; // Impossible state detected
+                }
             }
 
             possibleRowSets.push(possibleCellSet);
@@ -101,20 +105,6 @@ const getPossibleSolutionSet = (board, rowSets, colSets, houseSets) => {
     }
 
     return possibleSets;
-}
-
-const getDirectSetIndices = (possibleSets) => {
-    const setIndices = [];
-
-    for (let rowIndex = 0; rowIndex < possibleSets.length; rowIndex++) {
-        for (let colIndex = 0; colIndex < possibleSets[rowIndex].length; colIndex++) {
-            if (possibleSets[rowIndex][colIndex].size === 1) {
-                setIndices.push([rowIndex, colIndex]);
-            }
-        }
-    }
-
-    return setIndices;
 }
 
 const getSmallestSetIndex = (possibleSets) => {
@@ -212,29 +202,10 @@ const isValid = (board) => {
     return true;
 }
 
-const markValue = (board, rowSets, colSets, houseSets, rowIndex, colIndex, value) => {
-    const houseRowIndex = Math.floor(rowIndex / 3);
-    const houseColIndex = Math.floor(colIndex / 3);
+const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getColSets(board), houseSets = getHouseSets(board), counter = 1) {
+    console.log('Solving step:' + counter);
 
-    board[rowIndex][colIndex] = value;
 
-    rowSets[rowIndex].add(value);
-    colSets[colIndex].add(value);
-    houseSets[houseRowIndex][houseColIndex].add(value);
-}
-
-const unmarkValue = (board, rowSets, colSets, houseSets, rowIndex, colIndex, value) => {
-    const houseRowIndex = Math.floor(rowIndex / 3);
-    const houseColIndex = Math.floor(colIndex / 3);
-
-    board[rowIndex][colIndex] = 0;
-
-    rowSets[rowIndex].delete(value);
-    colSets[colIndex].delete(value);
-    houseSets[houseRowIndex][houseColIndex].delete(value);
-}
-
-const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getColSets(board), houseSets = getHouseSets(board)) {
     if (isCompleted(board)) {
         return true;
     }
@@ -243,75 +214,40 @@ const solveSudoku = function (board, rowSets = getRowSets(board), colSets = getC
         return false;
     }
 
-    let possibleSolutionSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
-    let solutionSetIndices = getDirectSetIndices(possibleSolutionSets);
-
-    while(solutionSetIndices.length) {
-        for (const [rowIndex, colIndex] of solutionSetIndices) {
-            const value = Array.from(possibleSolutionSets[rowIndex][colIndex].values())[0];
-
-            markValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
-        }
-
-        possibleSolutionSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
-        solutionSetIndices = getDirectSetIndices(possibleSolutionSets);
+    const possibleSets = getPossibleSolutionSet(board, rowSets, colSets, houseSets);
+    
+    if (possibleSets === false) {
+        return false; // Impossible state detected
     }
 
-    const [rowIndex, colIndex] = getSmallestSetIndex(possibleSolutionSets);
+    const [rowIndex, colIndex] = getSmallestSetIndex(possibleSets);
+    const houseRowIndex = Math.floor(rowIndex / 3);
+    const houseColIndex = Math.floor(colIndex / 3);
 
     if (rowIndex < 0 || colIndex < 0) {
         return false;
     }
 
-    for (let value of possibleSolutionSets[rowIndex][colIndex].values()) {
-        markValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
+    for (let value of possibleSets[rowIndex][colIndex].values()) {
+        const lastValue = board[rowIndex][colIndex];
+        board[rowIndex][colIndex] = value;
 
-        if (solveSudoku(board, rowSets, colSets, houseSets)) {
+        rowSets[rowIndex].add(value);
+        colSets[colIndex].add(value);
+        houseSets[houseRowIndex][houseColIndex].add(value);
+
+        if (solveSudoku(board, rowSets, colSets, houseSets, ++counter)) {
             return true;
         }
 
-        unmarkValue(board, rowSets, colSets, houseSets, rowIndex, colIndex, value);
+        board[rowIndex][colIndex] = lastValue;
+        rowSets[rowIndex].delete(value);
+        colSets[colIndex].delete(value);
+        houseSets[houseRowIndex][houseColIndex].delete(value);
     }
 
     return false;
 };
-
-
-// const board = [
-//     [5, 3, 0, 0, 7, 0, 0, 0, 0],
-//     [6, 0, 0, 1, 9, 5, 0, 0, 0],
-//     [0, 9, 8, 0, 0, 0, 0, 6, 0],
-//     [8, 0, 0, 0, 6, 0, 0, 0, 3],
-//     [4, 0, 0, 8, 0, 3, 0, 0, 1],
-//     [7, 0, 0, 0, 2, 0, 0, 0, 6],
-//     [0, 6, 0, 0, 0, 0, 2, 8, 0],
-//     [0, 0, 0, 4, 1, 9, 0, 0, 5],
-//     [0, 0, 0, 0, 8, 0, 0, 7, 9]
-// ];
-
-const board = [
-    [0, 0, 9, 7, 4, 8, 0, 0, 0],
-    [7, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 2, 0, 1, 0, 9, 0, 0, 0],
-    [0, 0, 7, 0, 0, 0, 2, 4, 0],
-    [0, 6, 4, 0, 1, 0, 5, 9, 0],
-    [0, 9, 8, 0, 0, 0, 3, 0, 0],
-    [0, 0, 0, 8, 0, 3, 0, 2, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 6],
-    [0, 0, 0, 2, 7, 5, 9, 0, 0]
-];
-
-// const board = [
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 9, 0, 0, 1, 0, 0, 3, 0],
-//     [0, 0, 6, 0, 2, 0, 7, 0, 0],
-//     [0, 0, 0, 3, 0, 4, 0, 0, 0],
-//     [2, 1, 0, 0, 0, 0, 0, 9, 8],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 2, 5, 0, 6, 4, 0, 0],
-//     [0, 8, 0, 0, 0, 0, 0, 1, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0]
-// ];
 
 // const board = [
 //     [7, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -325,15 +261,69 @@ const board = [
 //     [0, 0, 0, 0, 0, 0, 0, 0, 0]
 // ];
 
-console.log(isValid(board));
-console.log(isCompleted(board));
-console.table(board);
+// const board = [
+//     [0, 0, 0, 0, 5, 0, 8, 9, 0],
+//     [0, 0, 0, 0, 6, 3, 7, 0, 0],
+//     [0, 0, 0, 8, 1, 9, 0, 5, 6],
 
+//     [5, 0, 0, 0, 0, 2, 4, 0, 3],
+//     [4, 2, 8, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+//     [0, 0, 7, 0, 4, 0, 0, 0, 0],
+//     [0, 0, 4, 3, 8, 1, 6, 7, 0],
+//     [0, 5, 3, 0, 0, 0, 1, 0, 0]
+// ];
+
+// const board = [
+//     [4, 0, 0, 5, 0, 0, 3, 6, 0],
+//     [0, 0, 6, 9, 4, 8, 0, 0, 5],
+//     [0, 5, 0, 0, 0, 0, 0, 0, 0],
+
+//     [0, 6, 9, 0, 0, 3, 5, 4, 8],
+//     [0, 0, 2, 8, 5, 7, 6, 9, 1],
+//     [0, 0, 1, 0, 9, 4, 7, 2, 3],
+
+//     [0, 0, 3, 1, 2, 9, 4, 5, 6],
+//     [9, 1, 5, 0, 8, 0, 2, 3, 7],
+//     [6, 2, 4, 7, 3, 0, 0, 1, 0]
+// ];
+
+// const board = [
+//     [5,0,7, 0,4,0, 0,0,0],
+//     [0,1,0, 9,6,0, 0,5,7],
+//     [0,9,0, 0,3,7, 6,4,1],
+
+//     [0,0,5, 0,7,3, 1,0,2],
+//     [0,0,9, 0,2,5, 7,0,4],
+//     [7,0,0, 0,0,1, 5,0,8],
+
+//     [6,0,0, 3,1,9, 4,0,0],
+//     [2,0,3, 7,0,0, 0,1,0],
+//     [9,4,0, 0,0,6, 0,0,0],
+// ];
+
+const board = [
+    [4,0,0, 0,0,5, 6,7,0],
+    [0,0,6, 0,9,8, 0,0,5],
+    [0,0,0, 0,4,7, 0,0,0],
+
+    [0,0,0, 7,0,9, 0,0,3],
+    [6,5,0, 0,0,0, 0,0,0],
+    [0,1,7, 4,0,0, 0,0,0],
+
+    [9,4,3, 0,0,1, 7,2,0],
+    [2,0,0, 0,0,0, 1,0,9],
+    [0,8,0, 0,2,0, 0,0,4],
+];
+
+console.table(board);
 console.time('program');
 solveSudoku(board);
 console.timeEnd('program');
 
 console.log(isValid(board));
 console.log(isCompleted(board));
+
 console.table(board);
 console.log('Done', Date().toString());
