@@ -15,9 +15,9 @@ class Subscription<T extends { name: string }> implements ISubscription {
     private eventName: string;
     private eventBus: IEventBus<T>;
 
-    constructor(eventBus: IEventBus<T>, key: string) {
+    constructor(eventBus: IEventBus<T>, eventName: string) {
         this.eventBus = eventBus;
-        this.eventName = key;
+        this.eventName = eventName;
     }
 
     unsubscribe() {
@@ -66,8 +66,17 @@ class EventBus<T extends { name: string }> implements IEventBus<T> {
         return new Subscription<T>(this, eventName);
     }
 
-    unsubscribe(eventName: string): void {
-        this.eventHandlers.delete(eventName);
+    unsubscribe(eventName: string, eventHandler?: EventHandler<T>): void {
+        if (eventHandler != null) {
+            this.eventHandlers.delete(eventName);
+        } else {
+            const eventHandlers = this.eventHandlers.get(eventName) || [];
+            const updatedEventHandlers = eventHandlers.filter(
+                (_eventHandler) => _eventHandler !== eventHandler
+            );
+
+            this.eventHandlers.set(eventName, updatedEventHandlers);
+        }
     }
 }
 
