@@ -1,0 +1,183 @@
+const connectDots = (board, x, y, endX, endY) => {
+    const length = board.length;
+    const width = board[length - 1].length;
+    const winPathLength = length * width;
+
+    const allPaths = [];
+
+    const getKey = (x, y) => `${x}-${y}`;
+
+    const _connectDots = (x, y, currentPath = [], visited = new Map()) => {
+        if (x < 0 || y < 0 || x >= length || y >= length || visited.get(getKey(x, y))) {
+            return false;
+        }
+
+        if (x === endX && y === endY && currentPath.length === winPathLength - 1) {
+            allPaths.push([...currentPath, [x, y]]);
+            return true;
+        }
+
+        currentPath.push([x, y]);
+        visited.set(getKey(x, y), true);
+
+        if (board[x][y][0]) {
+            _connectDots(x - 1, y, structuredClone(currentPath), structuredClone(visited));
+        }
+
+        if (board[x][y][1]) {
+            _connectDots(x, y + 1, structuredClone(currentPath), structuredClone(visited));
+        }
+
+        if (board[x][y][2]) {
+            _connectDots(x + 1, y, structuredClone(currentPath), structuredClone(visited));
+        }
+
+        if (board[x][y][3]) {
+            _connectDots(x, y - 1, structuredClone(currentPath), structuredClone(visited));
+        }
+
+        currentPath.pop();
+        visited.set(getKey(x, y), false);
+        return false;
+    };
+
+    _connectDots(x, y);
+    return allPaths;
+};
+
+// const board1 = [
+//     [[0, 1, 1, 0], [0, 1, 1, 1], [0, 1, 1, 1], [0, 0, 1, 1]],
+//     [[1, 1, 1, 0], [1, 1, 1, 1], [1, 1, 1, 1], [1, 0, 1, 1]],
+//     [[1, 1, 1, 0], [1, 1, 1, 1], [1, 1, 1, 1], [1, 0, 1, 1]],
+//     [[1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 0, 1]],
+// ];
+
+const board1 = [
+    [
+        [0, 1, 1, 0],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 0, 1, 1],
+        [1, 1, 0, 0],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 1, 1],
+        [0, 1, 1, 1],
+        [1, 0, 1, 1],
+        [1, 0, 1, 0],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 0, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+    ],
+    [
+        [1, 1, 0, 0],
+        [0, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 0, 0, 1],
+    ]
+];
+
+const board2 = [
+    [
+        [0, 1, 1, 0],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+    ],
+    [
+        [1, 1, 0, 0],
+        [1, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 0, 0, 1],
+    ],
+];
+
+const board3 = [
+    [
+        [0, 1, 1, 0],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 1, 1, 1],
+        [0, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 1, 0, 1],
+        [1, 1, 1, 1],
+        [1, 0, 1, 1],
+        [1, 1, 1, 0],
+        [1, 0, 0, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [0, 1, 1, 1],
+        [1, 1, 0, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [0, 0, 1, 1],
+    ],
+    [
+        [1, 1, 1, 0],
+        [1, 0, 1, 1],
+        [0, 1, 1, 0],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 0, 0, 1],
+    ],
+    [
+        [1, 1, 0, 0],
+        [1, 1, 1, 1],
+        [1, 1, 0, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [0, 0, 1, 1],
+    ],
+    [
+        [0, 1, 0, 0],
+        [1, 1, 0, 1],
+        [0, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 1, 0, 1],
+        [1, 0, 0, 1],
+    ],
+];
+// @formatter:off
+
+console.table(connectDots(board1, 0, 2, 4, 4));
