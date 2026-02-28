@@ -8,7 +8,6 @@ const connectDots = (board, x, y, endX, endY) => {
     const getKey = (x, y) => `${x}-${y}`;
 
     const _connectDots = (x, y, currentPath = [], visited = new Map()) => {
-
         if (x < 0 || y < 0 || x >= length || y >= width || visited.get(getKey(x, y))) {
             return false;
         }
@@ -22,20 +21,23 @@ const connectDots = (board, x, y, endX, endY) => {
         }
 
         if (board[x][y][0]) {
-            _connectDots(x - 1, y, structuredClone(currentPath), structuredClone(visited));
+            _connectDots(x - 1, y, currentPath, visited);
         }
 
         if (board[x][y][1]) {
-            _connectDots(x, y + 1, structuredClone(currentPath), structuredClone(visited));
+            _connectDots(x, y + 1, currentPath, visited);
         }
 
         if (board[x][y][2]) {
-            _connectDots(x + 1, y, structuredClone(currentPath), structuredClone(visited));
+            _connectDots(x + 1, y, currentPath, visited);
         }
 
         if (board[x][y][3]) {
-            _connectDots(x, y - 1, structuredClone(currentPath), structuredClone(visited));
+            _connectDots(x, y - 1, currentPath, visited);
         }
+
+        currentPath.pop();
+        visited.set(getKey(x, y), false);
 
         return false;
     };
